@@ -6,16 +6,16 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/components/auth/useAuth";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "How It Works", href: "#how-it-works" },
-  { label: "Recent Items", href: "#recent-items" },
-  { label: "Success Stories", href: "#testimonials" },
+  { label: "Home", href: "/#home" },
+  { label: "How It Works", href: "/#how-it-works" },
+  { label: "Recent Items", href: "/#recent-items" },
+  { label: "Success Stories", href: "/#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -86,15 +86,31 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Button variant="secondary" size="sm" onClick={() => goProtected("/browse")}>
-              Browse Found Items
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => go("/login")}>
-              Sign In
-            </Button>
-            <Button variant="primary" size="sm" onClick={() => goProtected("/report")}>
-              Report Item
-            </Button>
+            {user ? (
+              <>
+                <Button variant="secondary" size="sm" onClick={() => go("/dashboard")}>
+                  Dashboard
+                </Button>
+                <Button variant="ghost" size="sm" onClick={async () => {
+                  await logout();
+                  router.push("/");
+                }}>
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="secondary" size="sm" onClick={() => goProtected("/browse")}>
+                  Browse Found Items
+                </Button>
+                <Button variant="ghost" size="sm" onClick={() => go("/login")}>
+                  Sign In
+                </Button>
+                <Button variant="primary" size="sm" onClick={() => goProtected("/report")}>
+                  Report Item
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile actions */}
@@ -145,39 +161,69 @@ export default function Navbar() {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-2 border-t border-app">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    goProtected("/browse");
-                  }}
-                >
-                  Browse Found Items
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    go("/login");
-                  }}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    setMobileOpen(false);
-                    goProtected("/report");
-                  }}
-                >
-                  Report Item
-                </Button>
+                {user ? (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        go("/dashboard");
+                      }}
+                    >
+                      Dashboard
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full"
+                      onClick={async () => {
+                        setMobileOpen(false);
+                        await logout();
+                        router.push("/");
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        goProtected("/browse");
+                      }}
+                    >
+                      Browse Found Items
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        go("/login");
+                      }}
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        goProtected("/report");
+                      }}
+                    >
+                      Report Item
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
