@@ -1,20 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "FindIt — Lost & Found Platform | Reunite With What Matters Most",
+  description:
+    "Report lost items, browse found submissions, and connect with finders in your community. AI-powered matching helps reunite thousands of items every day.",
+  keywords: [
+    "lost and found",
+    "report lost item",
+    "found items",
+    "item recovery",
+    "community lost found",
+  ],
 };
 
 export default function RootLayout({
@@ -23,10 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" className={inter.variable}>
+      <body className="antialiased bg-gray-950 text-white font-sans">
         {children}
       </body>
     </html>
