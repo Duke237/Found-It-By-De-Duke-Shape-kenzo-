@@ -15,6 +15,10 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] Memory bank documentation
 - [x] Recipe system for common features
 - [x] Lost & Found landing page implementation (full component architecture)
+- [x] Added authentication system (login + signup) with split-screen auth layout
+- [x] Implemented demo session cookie auth API routes (login/signup/me/logout)
+- [x] Added protected routes for key actions (report/browse) with middleware redirects
+- [x] Updated navbar quick actions to redirect unauthenticated users to login before protected actions
 
 ## Current Structure
 
@@ -35,6 +39,12 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 | `src/components/ui/Button.tsx` | Reusable button (4 variants) | ✅ Ready |
 | `src/components/ui/Badge.tsx` | Reusable badge (5 color variants) | ✅ Ready |
 | `.kilocode/` | AI context & recipes | ✅ Ready |
+| `src/app/(auth)/login/page.tsx` | Login page (split-screen auth card) | ✅ Ready |
+| `src/app/(auth)/signup/page.tsx` | Signup page (split-screen auth card) | ✅ Ready |
+| `src/app/(protected)/report/page.tsx` | Protected report page (requires auth) | ✅ Ready |
+| `src/app/(protected)/browse/page.tsx` | Protected browse page (requires auth) | ✅ Ready |
+| `src/app/api/auth/*` | Auth API routes (demo cookie session) | ✅ Ready |
+| `middleware.ts` | Protected-route redirect middleware | ✅ Ready |
 
 ## Current Focus
 
@@ -44,6 +54,11 @@ Lost & Found application is fully implemented. The app features:
 - Custom CSS animations (float, fade-in, ping-slow)
 - Interactive components (search toggle, category/status filters)
 - All content themed around lost/found services
+
+Authentication is now available for protected actions:
+- Split-screen login and signup pages with reusable form components
+- Form validation + password visibility toggle
+- Protected routes for key actions with automatic redirect to `/login?next=...`
 
 ## Quick Start Guide
 
@@ -99,3 +114,4 @@ export async function GET() {
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-28 | Added blue/white/black token color system (fixed single theme) |
+| 2026-02-28 | Added auth (login/signup), demo cookie session API routes, and protected-route redirects for report/browse actions |

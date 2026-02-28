@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
+import { useAuth } from "@/components/auth/useAuth";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -12,8 +14,23 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const router = useRouter();
+  const { user, loading } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  function go(path: string) {
+    router.push(path);
+  }
+
+  function goProtected(path: string) {
+    if (loading) return;
+    if (!user) {
+      router.push(`/login?next=${encodeURIComponent(path)}`);
+      return;
+    }
+    router.push(path);
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -69,10 +86,13 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <Button variant="ghost" size="sm">
+            <Button variant="secondary" size="sm" onClick={() => goProtected("/browse")}>
+              Browse Found Items
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => go("/login")}>
               Sign In
             </Button>
-            <Button variant="primary" size="sm">
+            <Button variant="primary" size="sm" onClick={() => goProtected("/report")}>
               Report Item
             </Button>
           </div>
@@ -125,10 +145,37 @@ export default function Navbar() {
                 </a>
               ))}
               <div className="flex flex-col gap-2 pt-2 border-t border-app">
-                <Button variant="ghost" size="sm" className="w-full">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    goProtected("/browse");
+                  }}
+                >
+                  Browse Found Items
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    go("/login");
+                  }}
+                >
                   Sign In
                 </Button>
-                <Button variant="primary" size="sm" className="w-full">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setMobileOpen(false);
+                    goProtected("/report");
+                  }}
+                >
                   Report Item
                 </Button>
               </div>

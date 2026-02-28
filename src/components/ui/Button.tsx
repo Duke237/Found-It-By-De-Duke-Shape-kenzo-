@@ -8,7 +8,6 @@ interface ButtonProps {
   size?: "sm" | "md" | "lg";
   className?: string;
   onClick?: () => void;
-  href?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
 }
@@ -23,15 +22,15 @@ export default function Button({
   disabled = false,
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-300 cursor-pointer";
+    "inline-flex items-center justify-center font-semibold rounded-full transition-all duration-200 cursor-pointer select-none active:translate-y-px";
 
   const variants = {
     primary:
-      "bg-[rgb(var(--accent))] text-white hover:bg-[rgb(var(--accent-2))] shadow-lg hover:shadow-black/10 hover:scale-105",
+      "bg-[rgb(var(--accent))] text-white hover:bg-[rgb(var(--accent-2))] shadow-lg shadow-black/10 hover:shadow-black/15",
     secondary:
-      "bg-[rgb(var(--surface))] text-app hover:bg-[rgb(var(--surface-2))] shadow-lg hover:shadow-black/10 hover:scale-105 border border-app",
+      "bg-[rgb(var(--surface))] text-app hover:bg-[rgb(var(--surface-2))] shadow-lg shadow-black/5 hover:shadow-black/10 border border-app",
     outline:
-      "border-2 border-[rgb(var(--accent))] text-accent hover:bg-[rgb(var(--accent))] hover:text-white hover:scale-105",
+      "border-2 border-[rgb(var(--accent))] text-accent hover:bg-[rgb(var(--accent))] hover:text-white",
     ghost:
       "text-muted hover:text-app hover:bg-[rgb(var(--surface)/0.6)] border border-transparent",
   };
@@ -47,7 +46,7 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className} ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className} ${disabled ? "opacity-50 cursor-not-allowed active:translate-y-0" : "hover:-translate-y-0.5"}`}
     >
       {children}
     </button>
