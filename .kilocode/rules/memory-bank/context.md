@@ -23,6 +23,13 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] Added desktop sidebar navigation (Dashboard Overview, Report Lost/Found Item, AI Assistant, Notifications, Settings)
 - [x] Added mobile bottom navigation bar with icons (Home, Search, Analytics, Notifications, Profile)
 - [x] Updated login/signup to redirect to /dashboard after successful authentication
+- [x] Fixed routing/auth logic: authenticated users redirected to dashboard from landing/login/signup, unauthenticated users redirected to login from protected routes
+- [x] Added logout button and user profile icon (initials) in dashboard header (desktop + mobile)
+- [x] Added full Report Lost Item form (item name, description, category dropdown with 8 categories, location, date/time, image upload, contact number)
+- [x] Added full Report Found Item form (same structure as lost item)
+- [x] Added AI Assistant chat page (only responds to lost/found related queries)
+- [x] Added Notifications page with system alerts (match found, submission status, updates)
+- [x] Added Settings page with profile picture upload, username, email, password change, language preference
 
 ## Current Structure
 
@@ -48,6 +55,14 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 | `src/app/(protected)/report/page.tsx` | Protected report page (requires auth) | ✅ Ready |
 | `src/app/(protected)/browse/page.tsx` | Protected browse page (requires auth) | ✅ Ready |
 | `src/app/(protected)/dashboard/page.tsx` | User dashboard with welcome message | ✅ Ready |
+| `src/app/(protected)/dashboard/report-lost/page.tsx` | Report lost item form (8 categories, image upload) | ✅ Ready |
+| `src/app/(protected)/dashboard/report-found/page.tsx` | Report found item form | ✅ Ready |
+| `src/app/(protected)/dashboard/assistant/page.tsx` | AI Assistant chat interface | ✅ Ready |
+| `src/app/(protected)/dashboard/notifications/page.tsx` | System notifications page | ✅ Ready |
+| `src/app/(protected)/dashboard/settings/page.tsx` | User settings (profile, account, security, preferences) | ✅ Ready |
+| `src/components/dashboard/Sidebar.tsx` | Desktop sidebar navigation | ✅ Ready |
+| `src/components/dashboard/BottomNav.tsx` | Mobile bottom navigation | ✅ Ready |
+| `middleware.ts` | Protected route redirects + auth flow control | ✅ Ready |
 | `src/components/dashboard/Sidebar.tsx` | Desktop sidebar navigation | ✅ Ready |
 | `src/components/dashboard/BottomNav.tsx` | Mobile bottom navigation bar | ✅ Ready |
 | `src/app/api/auth/*` | Auth API routes (demo cookie session) | ✅ Ready |
