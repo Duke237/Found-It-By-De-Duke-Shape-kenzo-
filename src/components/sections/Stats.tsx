@@ -20,7 +20,7 @@ const stats = [
         />
       </svg>
     ),
-    color: "orange",
+    color: "accent",
   },
   {
     value: "38,500+",
@@ -41,7 +41,7 @@ const stats = [
         />
       </svg>
     ),
-    color: "green",
+    color: "accent2",
   },
   {
     value: "120+",
@@ -62,7 +62,7 @@ const stats = [
         />
       </svg>
     ),
-    color: "blue",
+    color: "accent",
   },
   {
     value: "98%",
@@ -83,43 +83,43 @@ const stats = [
         />
       </svg>
     ),
-    color: "purple",
+    color: "accent2",
   },
 ];
 
 const colorMap: Record<string, string> = {
-  orange: "bg-orange-500/20 text-orange-400 border-orange-500/20",
-  green: "bg-green-500/20 text-green-400 border-green-500/20",
-  blue: "bg-blue-500/20 text-blue-400 border-blue-500/20",
-  purple: "bg-purple-500/20 text-purple-400 border-purple-500/20",
+  accent:
+    "bg-[rgb(var(--accent)/0.14)] text-accent border-[rgb(var(--accent)/0.25)]",
+  accent2:
+    "bg-[rgb(var(--accent-2)/0.14)] text-[rgb(var(--accent-2))] border-[rgb(var(--accent-2)/0.25)]",
 };
 
 export default function Stats() {
   return (
-    <section className="py-16 lg:py-20 bg-gray-950 border-y border-white/5">
+    <section className="py-16 lg:py-20 bg-app border-y border-app">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {stats.map((stat, i) => (
             <div
               key={i}
-              className="group relative bg-gray-900/50 rounded-2xl p-6 border border-white/5 hover:border-orange-500/20 transition-all duration-300 hover:-translate-y-1"
+              className="group relative bg-card rounded-2xl p-6 border border-app hover:border-accent transition-all duration-300 hover:-translate-y-1"
             >
               <div
                 className={`w-12 h-12 rounded-xl border flex items-center justify-center mb-4 ${colorMap[stat.color]}`}
               >
                 {stat.icon}
               </div>
-              <div className="text-3xl lg:text-4xl font-extrabold text-white mb-1">
+              <div className="text-3xl lg:text-4xl font-extrabold text-app mb-1">
                 {stat.value}
               </div>
-              <div className="text-orange-400 font-semibold text-sm mb-2">
+              <div className="text-accent font-semibold text-sm mb-2">
                 {stat.label}
               </div>
-              <p className="text-gray-500 text-xs leading-relaxed">
+              <p className="text-muted2 text-xs leading-relaxed">
                 {stat.description}
               </p>
               {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(135deg,rgb(var(--accent)/0.06),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             </div>
           ))}
         </div>

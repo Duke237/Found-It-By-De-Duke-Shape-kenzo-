@@ -132,20 +132,20 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="py-20 lg:py-28 bg-gray-950">
+    <section className="py-20 lg:py-28 bg-app">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge variant="orange" className="mb-4">
+          <Badge variant="accent" className="mb-4">
             ✨ &nbsp; Platform Features
           </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-6 leading-tight">
             Everything You Need to{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
+            <span className="gradient-text">
               Recover Your Items
             </span>
           </h2>
-          <p className="text-gray-400 text-lg leading-relaxed">
+          <p className="text-muted text-lg leading-relaxed">
             Our comprehensive platform combines cutting-edge technology with
             community trust to maximize your chances of recovering lost
             belongings.
@@ -157,30 +157,30 @@ export default function Features() {
           {features.map((feature, i) => (
             <div
               key={i}
-              className="group relative bg-gray-900/50 rounded-2xl p-6 lg:p-8 border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+              className="group relative bg-card rounded-2xl p-6 lg:p-8 border border-app hover:border-accent transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
               {/* Background glow on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgb(var(--accent)/0.06),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               {/* Icon */}
-              <div className="relative w-14 h-14 bg-orange-500/10 border border-orange-500/20 rounded-2xl flex items-center justify-center text-orange-400 mb-5 group-hover:bg-orange-500/20 transition-colors duration-300">
+              <div className="relative w-14 h-14 bg-[rgb(var(--accent)/0.12)] border border-[rgb(var(--accent)/0.25)] rounded-2xl flex items-center justify-center text-accent mb-5 group-hover:bg-[rgb(var(--accent)/0.18)] transition-colors duration-300">
                 {feature.icon}
               </div>
 
               {/* Highlight badge */}
-              <span className="inline-block text-xs font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full mb-3">
+              <span className="inline-block text-xs font-semibold text-accent bg-[rgb(var(--accent)/0.12)] px-2 py-0.5 rounded-full mb-3">
                 {feature.highlight}
               </span>
 
-              <h3 className="text-white font-bold text-lg mb-3">
+              <h3 className="text-app font-bold text-lg mb-3">
                 {feature.title}
               </h3>
-              <p className="text-gray-400 text-sm leading-relaxed">
+              <p className="text-muted text-sm leading-relaxed">
                 {feature.description}
               </p>
 
               {/* Arrow on hover */}
-              <div className="mt-4 flex items-center gap-1 text-orange-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="mt-4 flex items-center gap-1 text-accent text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <span>Learn more</span>
                 <svg
                   className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"

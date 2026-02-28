@@ -26,7 +26,6 @@ interface Item {
   description: string;
   reward?: string;
   verified: boolean;
-  bgColor: string;
 }
 
 const items: Item[] = [
@@ -42,7 +41,6 @@ const items: Item[] = [
       "Space black iPhone 15 Pro Max with a cracked screen protector. Has a blue leather case with initials 'J.M.' engraved.",
     reward: "$200",
     verified: true,
-    bgColor: "from-blue-500/20 to-blue-600/5",
   },
   {
     id: 2,
@@ -55,7 +53,6 @@ const items: Item[] = [
     description:
       "Found a brown leather handbag near the Bethesda Fountain. Contains personal items. Please contact to verify ownership.",
     verified: true,
-    bgColor: "from-amber-500/20 to-amber-600/5",
   },
   {
     id: 3,
@@ -68,7 +65,6 @@ const items: Item[] = [
     description:
       "Found a set of car keys with a distinctive red heart keychain and what appears to be a Toyota key fob.",
     verified: false,
-    bgColor: "from-red-500/20 to-red-600/5",
   },
   {
     id: 4,
@@ -82,7 +78,6 @@ const items: Item[] = [
       "Silver MacBook Pro 14-inch M3. Has a sticker of a mountain on the lid. Left at a coffee shop on Atlantic Ave.",
     reward: "$500",
     verified: true,
-    bgColor: "from-gray-500/20 to-gray-600/5",
   },
   {
     id: 5,
@@ -95,7 +90,6 @@ const items: Item[] = [
     description:
       "Navy blue North Face backpack with laptop compartment. Successfully returned to owner after 3 days.",
     verified: true,
-    bgColor: "from-green-500/20 to-green-600/5",
   },
   {
     id: 6,
@@ -109,7 +103,6 @@ const items: Item[] = [
       "Gold wedding band with inscription 'Forever & Always - 2019'. Lost while jogging in Prospect Park.",
     reward: "$1,000",
     verified: true,
-    bgColor: "from-yellow-500/20 to-yellow-600/5",
   },
 ];
 
@@ -124,9 +117,11 @@ const categories: (ItemCategory | "All")[] = [
 ];
 
 const statusColors: Record<ItemStatus, string> = {
-  Lost: "bg-red-500/20 text-red-400 border border-red-500/30",
-  Found: "bg-green-500/20 text-green-400 border border-green-500/30",
-  Returned: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
+  Lost: "bg-[rgb(var(--accent)/0.14)] text-accent border border-[rgb(var(--accent)/0.28)]",
+  Found:
+    "bg-[rgb(var(--accent-2)/0.14)] text-[rgb(var(--accent-2))] border border-[rgb(var(--accent-2)/0.28)]",
+  Returned:
+    "bg-[rgb(var(--accent)/0.12)] text-accent border border-[rgb(var(--accent)/0.25)]",
 };
 
 export default function RecentItems() {
@@ -144,28 +139,28 @@ export default function RecentItems() {
   return (
     <section
       id="recent-items"
-      className="py-20 lg:py-28 bg-gray-950 relative overflow-hidden"
+      className="py-20 lg:py-28 bg-app relative overflow-hidden"
     >
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[rgb(var(--accent)/0.06)] rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <div>
-            <Badge variant="orange" className="mb-4">
+            <Badge variant="accent" className="mb-4">
               📋 &nbsp; Live Reports
             </Badge>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-4 leading-tight">
               Recent{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
+              <span className="gradient-text">
                 Lost & Found
               </span>{" "}
               Items
             </h2>
-            <p className="text-gray-400 text-lg max-w-xl">
+            <p className="text-muted text-lg max-w-xl">
               Browse the latest submissions from our community. New items are
               added every few minutes.
             </p>
@@ -185,8 +180,8 @@ export default function RecentItems() {
                 onClick={() => setActiveStatus(s)}
                 className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
                   activeStatus === s
-                    ? "bg-orange-500 text-white"
-                    : "bg-gray-800/60 text-gray-400 hover:text-white hover:bg-gray-700/60"
+                    ? "bg-[rgb(var(--accent))] text-white"
+                    : "bg-[rgb(var(--surface-2)/0.7)] text-muted hover:text-app hover:bg-[rgb(var(--surface-2)/0.9)]"
                 }`}
               >
                 {s}
@@ -202,8 +197,8 @@ export default function RecentItems() {
                 onClick={() => setActiveFilter(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
                   activeFilter === cat
-                    ? "bg-gray-700 text-white border border-orange-500/50"
-                    : "bg-gray-800/40 text-gray-500 hover:text-gray-300 border border-white/5"
+                    ? "bg-[rgb(var(--surface-2))] text-app border border-[rgb(var(--accent)/0.45)]"
+                    : "bg-[rgb(var(--surface-2)/0.55)] text-muted2 hover:text-muted border border-app"
                 }`}
               >
                 {cat}
@@ -217,21 +212,21 @@ export default function RecentItems() {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="group bg-gray-900/60 rounded-2xl border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
+              className="group bg-card rounded-2xl border border-app hover:border-accent transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
               {/* Card Header */}
               <div
-                className={`bg-gradient-to-br ${item.bgColor} p-6 flex items-start justify-between`}
+                className="bg-[linear-gradient(135deg,rgb(var(--accent)/0.16),rgb(var(--accent-2)/0.03))] p-6 flex items-start justify-between"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 bg-gray-900/60 rounded-2xl flex items-center justify-center text-3xl">
+                  <div className="w-14 h-14 bg-[rgb(var(--surface)/0.7)] rounded-2xl flex items-center justify-center text-3xl">
                     {item.emoji}
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-base leading-tight">
+                    <h3 className="text-app font-bold text-base leading-tight">
                       {item.title}
                     </h3>
-                    <span className="text-gray-400 text-xs">{item.category}</span>
+                    <span className="text-muted text-xs">{item.category}</span>
                   </div>
                 </div>
                 <span
@@ -243,11 +238,11 @@ export default function RecentItems() {
 
               {/* Card Body */}
               <div className="p-5 space-y-3">
-                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+                <p className="text-muted text-sm leading-relaxed line-clamp-2">
                   {item.description}
                 </p>
 
-                <div className="flex items-center gap-4 text-xs text-gray-500">
+                <div className="flex items-center gap-4 text-xs text-muted2">
                   <span className="flex items-center gap-1">
                     <svg
                       className="w-3.5 h-3.5"
@@ -266,11 +261,11 @@ export default function RecentItems() {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                <div className="flex items-center justify-between pt-2 border-t border-app">
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-600 text-xs">{item.date}</span>
+                    <span className="text-muted2 text-xs">{item.date}</span>
                     {item.verified && (
-                      <span className="flex items-center gap-1 text-xs text-green-400">
+                      <span className="flex items-center gap-1 text-xs text-accent">
                         <svg
                           className="w-3 h-3"
                           fill="currentColor"
@@ -284,11 +279,11 @@ export default function RecentItems() {
                   </div>
                   <div className="flex items-center gap-2">
                     {item.reward && (
-                      <span className="text-xs font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded-full">
+                      <span className="text-xs font-bold text-accent bg-[rgb(var(--accent)/0.12)] px-2 py-0.5 rounded-full">
                         🏆 {item.reward}
                       </span>
                     )}
-                    <button className="text-xs text-orange-400 hover:text-orange-300 font-semibold transition-colors">
+                    <button className="text-xs text-accent hover:opacity-90 font-semibold transition-colors">
                       View →
                     </button>
                   </div>

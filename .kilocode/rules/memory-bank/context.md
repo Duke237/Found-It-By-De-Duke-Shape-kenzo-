@@ -39,11 +39,17 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 ## Current Focus
 
 Lost & Found application is fully implemented. The app features:
-- Dark theme (gray-950 base) with orange-500 accent color
+- Light/Dark mode toggle with persisted preference (localStorage)
+- Blue/white/black color system with theme tokens
 - Responsive design (mobile-first)
 - Custom CSS animations (float, fade-in, ping-slow)
 - Interactive components (search toggle, category/status filters)
 - All content themed around lost/found services
+
+Theme implementation notes:
+- Theme is applied pre-hydration via inline script in `src/app/layout.tsx` to avoid flashes
+- Theme state is provided via `src/components/theme/ThemeProvider.tsx`
+- Toggle button (sun/moon) is in the top nav via `src/components/theme/ThemeToggle.tsx`
 
 ## Quick Start Guide
 
@@ -98,3 +104,4 @@ export async function GET() {
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| 2026-02-28 | Added light/dark theme system (blue/white/black tokens) with navbar toggle and localStorage persistence |

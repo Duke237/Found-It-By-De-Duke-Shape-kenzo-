@@ -73,7 +73,7 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="bg-gray-950 border-t border-white/5 pt-16 pb-8"
+      className="bg-app border-t border-app pt-16 pb-8"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top section */}
@@ -81,7 +81,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
             <a href="#home" className="flex items-center gap-2 mb-4 group">
-              <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-9 h-9 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-xl flex items-center justify-center shadow-lg">
                 <svg
                   className="w-5 h-5 text-white"
                   fill="none"
@@ -96,11 +96,11 @@ export default function Footer() {
                   />
                 </svg>
               </div>
-              <span className="text-white font-bold text-xl tracking-tight">
-                Find<span className="text-orange-500">It</span>
+              <span className="text-app font-bold text-xl tracking-tight">
+                Find<span className="text-accent">It</span>
               </span>
             </a>
-            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
+            <p className="text-muted2 text-sm leading-relaxed mb-6 max-w-xs">
               The world&apos;s most trusted lost and found platform. Helping
               communities reunite with their lost belongings since 2020.
             </p>
@@ -112,7 +112,7 @@ export default function Footer() {
                   key={social.name}
                   href={social.href}
                   aria-label={social.name}
-                  className="w-9 h-9 bg-gray-800/60 hover:bg-orange-500/20 border border-white/5 hover:border-orange-500/30 rounded-lg flex items-center justify-center text-gray-500 hover:text-orange-400 transition-all duration-200"
+                  className="w-9 h-9 bg-[rgb(var(--surface-2)/0.6)] hover:bg-[rgb(var(--accent)/0.12)] border border-app hover:border-accent rounded-lg flex items-center justify-center text-muted2 hover:text-accent transition-all duration-200"
                 >
                   {social.icon}
                 </a>
@@ -123,7 +123,7 @@ export default function Footer() {
           {/* Links */}
           {Object.entries(footerLinks).map(([category, links]) => (
             <div key={category}>
-              <h4 className="text-white font-semibold text-sm mb-4">
+              <h4 className="text-app font-semibold text-sm mb-4">
                 {category}
               </h4>
               <ul className="space-y-2.5">
@@ -131,7 +131,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-gray-500 hover:text-gray-300 text-sm transition-colors duration-200"
+                      className="text-muted2 hover:text-muted text-sm transition-colors duration-200"
                     >
                       {link.label}
                     </a>
@@ -143,13 +143,13 @@ export default function Footer() {
         </div>
 
         {/* Newsletter */}
-        <div className="bg-gray-900/40 rounded-2xl p-6 border border-white/5 mb-10">
+        <div className="bg-card rounded-2xl p-6 border border-app mb-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
-              <h4 className="text-white font-semibold mb-1">
+              <h4 className="text-app font-semibold mb-1">
                 Get Recovery Alerts
               </h4>
-              <p className="text-gray-500 text-sm">
+              <p className="text-muted2 text-sm">
                 Subscribe to get notified about found items in your area.
               </p>
             </div>
@@ -157,9 +157,9 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 md:w-64 bg-gray-800/60 text-white placeholder-gray-600 px-4 py-2.5 rounded-xl border border-white/5 focus:outline-none focus:border-orange-500/50 text-sm transition-colors"
+                className="flex-1 md:w-64 bg-[rgb(var(--surface-2)/0.7)] text-app placeholder:text-muted2 px-4 py-2.5 rounded-xl border border-app focus:outline-none focus:border-[rgb(var(--accent)/0.5)] text-sm transition-colors"
               />
-              <button className="bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 whitespace-nowrap">
+              <button className="bg-[rgb(var(--accent))] hover:bg-[rgb(var(--accent-2))] text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-colors duration-200 whitespace-nowrap">
                 Subscribe
               </button>
             </div>
@@ -167,14 +167,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-white/5">
-          <p className="text-gray-600 text-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-app">
+          <p className="text-muted2 text-sm">
             © 2026 FindIt. All rights reserved. Made with ❤️ for honest
             communities.
           </p>
-          <div className="flex items-center gap-4 text-xs text-gray-600">
+          <div className="flex items-center gap-4 text-xs text-muted2">
             <span className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-[rgb(var(--accent))] rounded-full animate-pulse" />
               All systems operational
             </span>
             <span>·</span>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -25,7 +26,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-gray-950/95 backdrop-blur-md shadow-lg shadow-black/20"
+          ? "bg-[rgb(var(--bg)/0.85)] backdrop-blur-md shadow-lg shadow-black/10"
           : "bg-transparent"
       }`}
     >
@@ -33,7 +34,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="w-9 h-9 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -48,8 +49,8 @@ export default function Navbar() {
                 />
               </svg>
             </div>
-            <span className="text-white font-bold text-xl tracking-tight">
-              Find<span className="text-orange-500">It</span>
+            <span className="text-app font-bold text-xl tracking-tight">
+              Find<span className="text-accent">It</span>
             </span>
           </a>
 
@@ -59,16 +60,17 @@ export default function Navbar() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-gray-400 hover:text-white text-sm font-medium transition-colors duration-200 relative group"
+                className="text-muted hover:text-app text-sm font-medium transition-colors duration-200 relative group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[rgb(var(--accent))] group-hover:w-full transition-all duration-300" />
               </a>
             ))}
           </div>
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
+            <ThemeToggle />
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -77,52 +79,55 @@ export default function Navbar() {
             </Button>
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="lg:hidden text-gray-400 hover:text-white p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Mobile actions */}
+          <div className="lg:hidden flex items-center gap-2">
+            <ThemeToggle className="w-10 h-10" />
+            <button
+              className="text-muted hover:text-app p-2"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
             >
-              {mobileOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                {mobileOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-gray-900/95 backdrop-blur-md rounded-2xl mb-4 p-4 border border-white/10">
+          <div className="lg:hidden bg-[rgb(var(--surface)/0.9)] backdrop-blur-md rounded-2xl mb-4 p-4 border border-app">
             <div className="flex flex-col gap-3">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-gray-300 hover:text-white py-2 px-3 rounded-lg hover:bg-white/5 transition-all duration-200 text-sm font-medium"
+                  className="text-muted hover:text-app py-2 px-3 rounded-lg hover:bg-[rgb(var(--surface)/0.6)] transition-all duration-200 text-sm font-medium"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}
                 </a>
               ))}
-              <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
+              <div className="flex flex-col gap-2 pt-2 border-t border-app">
                 <Button variant="ghost" size="sm" className="w-full">
                   Sign In
                 </Button>

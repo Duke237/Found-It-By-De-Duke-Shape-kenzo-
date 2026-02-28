@@ -96,27 +96,27 @@ export default function HowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="py-20 lg:py-28 bg-gray-900/30 relative overflow-hidden"
+      className="py-20 lg:py-28 bg-subtle relative overflow-hidden"
     >
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/3 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[rgb(var(--accent)/0.06)] rounded-full blur-3xl" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 lg:mb-20">
-          <Badge variant="orange" className="mb-4">
+          <Badge variant="accent" className="mb-4">
             🔄 &nbsp; Simple Process
           </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-6 leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-6 leading-tight">
             How{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-600">
+            <span className="gradient-text">
               FindIt
             </span>{" "}
             Works
           </h2>
-          <p className="text-gray-400 text-lg leading-relaxed">
+          <p className="text-muted text-lg leading-relaxed">
             Our streamlined four-step process makes it easy to report, track,
             and recover your lost belongings with minimal effort.
           </p>
@@ -125,27 +125,27 @@ export default function HowItWorks() {
         {/* Steps */}
         <div className="relative">
           {/* Connecting line (desktop) */}
-          <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-orange-500/30 to-transparent" />
+          <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,rgb(var(--accent)/0.35),transparent)]" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
             {steps.map((step, i) => (
               <div key={i} className="relative group">
                 {/* Step card */}
-                <div className="bg-gray-900/60 rounded-2xl p-6 border border-white/5 hover:border-orange-500/30 transition-all duration-300 hover:-translate-y-2 h-full">
+                <div className="bg-card rounded-2xl p-6 border border-app hover:border-accent transition-all duration-300 hover:-translate-y-2 h-full">
                   {/* Number + Icon */}
                   <div className="flex items-start justify-between mb-5">
-                    <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-14 h-14 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-black/10 group-hover:scale-110 transition-transform duration-300">
                       {step.icon}
                     </div>
-                    <span className="text-5xl font-black text-white/5 group-hover:text-orange-500/10 transition-colors duration-300">
+                    <span className="text-5xl font-black text-[rgb(var(--text)/0.06)] group-hover:text-[rgb(var(--accent)/0.12)] transition-colors duration-300">
                       {step.number}
                     </span>
                   </div>
 
-                  <h3 className="text-white font-bold text-lg mb-3">
+                  <h3 className="text-app font-bold text-lg mb-3">
                     {step.title}
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                  <p className="text-muted text-sm leading-relaxed mb-4">
                     {step.description}
                   </p>
 
@@ -154,9 +154,9 @@ export default function HowItWorks() {
                     {step.tips.map((tip, j) => (
                       <li
                         key={j}
-                        className="flex items-center gap-2 text-xs text-gray-500"
+                        className="flex items-center gap-2 text-xs text-muted2"
                       >
-                        <div className="w-1.5 h-1.5 bg-orange-500 rounded-full flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 bg-[rgb(var(--accent))] rounded-full flex-shrink-0" />
                         {tip}
                       </li>
                     ))}
@@ -165,9 +165,9 @@ export default function HowItWorks() {
 
                 {/* Arrow connector (desktop) */}
                 {i < steps.length - 1 && (
-                  <div className="hidden lg:flex absolute -right-3 top-16 z-10 w-6 h-6 bg-gray-950 border border-orange-500/30 rounded-full items-center justify-center">
+                  <div className="hidden lg:flex absolute -right-3 top-16 z-10 w-6 h-6 bg-app border border-accent rounded-full items-center justify-center">
                     <svg
-                      className="w-3 h-3 text-orange-500"
+                      className="w-3 h-3 text-accent"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -188,10 +188,10 @@ export default function HowItWorks() {
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
-          <div className="inline-flex items-center gap-3 bg-gray-900/60 border border-white/10 rounded-2xl px-6 py-4">
-            <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+          <div className="inline-flex items-center gap-3 bg-card border border-app rounded-2xl px-6 py-4">
+            <div className="w-10 h-10 bg-[rgb(var(--accent)/0.14)] rounded-full flex items-center justify-center">
               <svg
-                className="w-5 h-5 text-green-400"
+                className="w-5 h-5 text-accent"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -205,10 +205,10 @@ export default function HowItWorks() {
               </svg>
             </div>
             <div className="text-left">
-              <p className="text-white font-semibold text-sm">
+              <p className="text-app font-semibold text-sm">
                 Average recovery time: 48 hours
               </p>
-              <p className="text-gray-500 text-xs">
+              <p className="text-muted2 text-xs">
                 Most items are returned within 2 days of reporting
               </p>
             </div>

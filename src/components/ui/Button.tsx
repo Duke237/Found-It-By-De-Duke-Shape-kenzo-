@@ -27,12 +27,13 @@ export default function Button({
 
   const variants = {
     primary:
-      "bg-gradient-to-r from-orange-500 to-orange-600 text-white hover:from-orange-600 hover:to-orange-700 shadow-lg hover:shadow-orange-500/30 hover:scale-105",
+      "bg-[linear-gradient(90deg,rgb(var(--accent)),rgb(var(--accent-2)))] text-white hover:brightness-110 shadow-lg hover:shadow-black/10 hover:scale-105",
     secondary:
-      "bg-white text-gray-900 hover:bg-gray-100 shadow-lg hover:shadow-white/20 hover:scale-105",
+      "bg-[rgb(var(--surface))] text-app hover:bg-[rgb(var(--surface-2))] shadow-lg hover:shadow-black/10 hover:scale-105 border border-app",
     outline:
-      "border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white hover:scale-105",
-    ghost: "text-gray-300 hover:text-white hover:bg-white/10",
+      "border-2 border-[rgb(var(--accent))] text-accent hover:bg-[rgb(var(--accent))] hover:text-white hover:scale-105",
+    ghost:
+      "text-muted hover:text-app hover:bg-[rgb(var(--surface)/0.6)] border border-transparent",
   };
 
   const sizes = {

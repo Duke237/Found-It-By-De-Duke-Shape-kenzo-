@@ -1,5 +1,106 @@
 @import "tailwindcss";
 
+/*
+  Theme tokens (blue / white / black system)
+  Stored as space-separated RGB values so we can use alpha: rgb(var(--token) / 0.5)
+*/
+
+:root {
+  --bg: 255 255 255;
+  --surface: 245 247 255;
+  --surface-2: 236 242 255;
+  --text: 9 9 11;
+  --muted: 71 85 105;
+  --muted-2: 100 116 139;
+  --border: 226 232 240;
+  --accent: 37 99 235; /* blue-600 */
+  --accent-2: 29 78 216; /* blue-700 */
+  --shadow: 2 6 23;
+}
+
+html[data-theme="dark"] {
+  --bg: 3 7 18; /* near-black with a blue tint */
+  --surface: 15 23 42;
+  --surface-2: 30 41 59;
+  --text: 248 250 252;
+  --muted: 148 163 184;
+  --muted-2: 100 116 139;
+  --border: 51 65 85;
+  --accent: 96 165 250; /* blue-400 */
+  --accent-2: 59 130 246; /* blue-500 */
+  --shadow: 0 0 0;
+}
+
+@layer base {
+  html {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+  }
+}
+
+@layer utilities {
+  .bg-app {
+    background-color: rgb(var(--bg));
+  }
+
+  .bg-card {
+    background-color: rgb(var(--surface) / 0.75);
+  }
+
+  .bg-card-strong {
+    background-color: rgb(var(--surface) / 0.9);
+  }
+
+  .bg-subtle {
+    background-color: rgb(var(--surface) / 0.4);
+  }
+
+  .text-app {
+    color: rgb(var(--text));
+  }
+
+  .text-muted {
+    color: rgb(var(--muted));
+  }
+
+  .text-muted2 {
+    color: rgb(var(--muted-2));
+  }
+
+  .text-accent {
+    color: rgb(var(--accent));
+  }
+
+  .border-app {
+    border-color: rgb(var(--border) / 0.7);
+  }
+
+  .border-accent {
+    border-color: rgb(var(--accent) / 0.35);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-2)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Smooth theme transitions (enabled briefly during toggle) */
+.theme-transition,
+.theme-transition * {
+  transition-property: background-color, color, border-color, fill, stroke, box-shadow;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
+}
+
 /* Custom animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
@@ -51,27 +152,22 @@
   animation: slide-up 0.6s ease-out forwards;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: rgb(var(--bg));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: rgb(var(--muted-2) / 0.35);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: rgb(var(--accent) / 0.65);
 }
 
 /* Line clamp utility */
@@ -84,30 +180,22 @@ html {
 
 /* Selection color */
 ::selection {
-  background-color: rgba(249, 115, 22, 0.3);
-  color: white;
+  background-color: rgb(var(--accent) / 0.25);
+  color: rgb(var(--text));
 }
 
 /* Focus styles */
 *:focus-visible {
-  outline: 2px solid rgba(249, 115, 22, 0.6);
+  outline: 2px solid rgb(var(--accent) / 0.6);
   outline-offset: 2px;
-}
-
-/* Gradient text utility */
-.gradient-text {
-  background: linear-gradient(135deg, #fb923c, #f97316);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* Glass morphism */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgb(var(--surface) / 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(var(--border) / 0.45);
 }
 
 /* Delay utilities for animations */
