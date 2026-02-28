@@ -4,6 +4,7 @@ import type { NextResponse } from "next/server";
 export type SessionUser = {
   username?: string;
   email: string;
+  role: "user" | "admin";
 };
 
 const COOKIE_NAME = "findit_session";
@@ -20,6 +21,7 @@ function decodeSession(value: string): SessionUser | null {
     return {
       email: parsed.email,
       username: typeof parsed.username === "string" ? parsed.username : undefined,
+      role: parsed.role === "admin" ? "admin" : "user",
     };
   } catch {
     return null;

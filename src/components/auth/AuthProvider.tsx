@@ -5,6 +5,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 export type SessionUser = {
   username?: string;
   email: string;
+  role: "user" | "admin";
 };
 
 type AuthContextValue = {

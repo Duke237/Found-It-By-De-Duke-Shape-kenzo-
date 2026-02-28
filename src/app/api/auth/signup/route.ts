@@ -26,8 +26,8 @@ export async function POST(req: Request) {
   }
 
   // Demo auth: no persistence; session cookie is enough for UI + routing.
-  const res = NextResponse.json({ user: { username, email } });
-  setSessionCookie(res, { username, email });
+  const res = NextResponse.json({ user: { username, email, role: "user" } });
+  setSessionCookie(res, { username, email, role: "user" });
   return res;
 }
 

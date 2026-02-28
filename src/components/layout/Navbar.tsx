@@ -4,13 +4,14 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/components/auth/useAuth";
+import Logo from "@/components/ui/Logo";
 
 const navLinks = [
-  { label: "Home", href: "/#home" },
-  { label: "How It Works", href: "/#how-it-works" },
-  { label: "Recent Items", href: "/#recent-items" },
-  { label: "Success Stories", href: "/#testimonials" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#home", sectionId: "home" },
+  { label: "How It Works", href: "/#how-it-works", sectionId: "how-it-works" },
+  { label: "Recent Items", href: "/#recent-items", sectionId: "recent-items" },
+  { label: "Success Stories", href: "/#testimonials", sectionId: "testimonials" },
+  { label: "Contact", href: "#contact", sectionId: "contact" },
 ];
 
 export default function Navbar() {
@@ -18,6 +19,7 @@ export default function Navbar() {
   const { user, loading, logout } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("home");
 
   function go(path: string) {
     router.push(path);
@@ -32,64 +34,81 @@ export default function Navbar() {
     router.push(path);
   }
 
+  // Handle scroll for navbar background
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle scroll for active tab detection
+  useEffect(() => {
+    const sections = navLinks.map((link) => link.sectionId);
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100;
+      
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sections[i]);
+        if (section && section.offsetTop <= scrollPosition) {
+          setActiveTab(sections[i]);
+          break;
+        }
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Set initial active tab
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[rgb(var(--bg)/0.85)] backdrop-blur-md shadow-lg shadow-black/10"
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+        scrolled || mobileOpen
+          ? "bg-white shadow-lg shadow-black/10"
           : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-[rgb(var(--accent))] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-              <svg
-                className="w-5 h-5 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <span className="text-app font-bold text-xl tracking-tight">
-              Find<span className="text-accent">It</span>
-            </span>
-          </a>
+          <Logo href="#home" size="lg" />
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-muted hover:text-app text-sm font-medium transition-colors duration-200 relative group"
-              >
-                {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[rgb(var(--accent))] group-hover:w-full transition-all duration-300" />
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = activeTab === link.sectionId;
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setActiveTab(link.sectionId)}
+                  className={`text-sm font-medium transition-all duration-200 relative group ${
+                    isActive ? "text-blue-600" : "text-gray-600 hover:text-gray-900"
+                  }`}
+                >
+                  {link.label}
+                  {isActive ? (
+                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full" />
+                  ) : (
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300" />
+                  )}
+                </a>
+              );
+            })}
           </div>
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             {user ? (
               <>
-                <Button variant="secondary" size="sm" onClick={() => go("/dashboard")}>
-                  Dashboard
+                <Button 
+                  variant="secondary" 
+                  size="sm" 
+                  onClick={() => go((user as any).role === "admin" ? "/admin" : "/dashboard")}
+                >
+                  {(user as any).role === "admin" ? "Admin Dashboard" : "Dashboard"}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={async () => {
                   await logout();
@@ -148,19 +167,29 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="lg:hidden bg-[rgb(var(--surface)/0.9)] backdrop-blur-md rounded-2xl mb-4 p-4 border border-app">
+          <div className="lg:hidden bg-white backdrop-blur-md rounded-2xl mb-4 p-4 border border-gray-200 shadow-lg">
             <div className="flex flex-col gap-3">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="text-muted hover:text-app py-2 px-3 rounded-lg hover:bg-[rgb(var(--surface)/0.6)] transition-all duration-200 text-sm font-medium"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </a>
-              ))}
-              <div className="flex flex-col gap-2 pt-2 border-t border-app">
+              {navLinks.map((link) => {
+                const isActive = activeTab === link.sectionId;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    onClick={() => {
+                      setActiveTab(link.sectionId);
+                      setMobileOpen(false);
+                    }}
+                    className={`py-2 px-3 rounded-lg transition-all duration-200 text-sm font-medium ${
+                      isActive
+                        ? "bg-blue-50 text-blue-700"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
+              <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
                 {user ? (
                   <>
                     <Button

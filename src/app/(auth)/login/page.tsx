@@ -35,7 +35,16 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       await login({ email, password });
-      router.replace(next);
+      
+      // Check user role after login and redirect accordingly
+      const res = await fetch("/api/auth/me");
+      const data = await res.json();
+      
+      if (data.user?.role === "admin") {
+        router.replace("/admin");
+      } else {
+        router.replace(next);
+      }
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "Login failed.");
     } finally {

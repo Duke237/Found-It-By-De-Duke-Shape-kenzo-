@@ -1,4 +1,5 @@
 import React from "react";
+import Logo from "@/components/ui/Logo";
 
 const footerLinks = {
   Platform: [
@@ -73,34 +74,15 @@ export default function Footer() {
   return (
     <footer
       id="contact"
-      className="bg-app border-t border-app pt-16 pb-8"
+      className="bg-white border-t border-gray-200 pt-16 pb-8"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top section */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 mb-12">
           {/* Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
-            <a href="#home" className="flex items-center gap-2 mb-4 group">
-              <div className="w-9 h-9 bg-[rgb(var(--accent))] rounded-xl flex items-center justify-center shadow-lg">
-                <svg
-                  className="w-5 h-5 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              </div>
-              <span className="text-app font-bold text-xl tracking-tight">
-                Find<span className="text-accent">It</span>
-              </span>
-            </a>
-            <p className="text-muted2 text-sm leading-relaxed mb-6 max-w-xs">
+            <Logo href="#home" size="lg" className="mb-4" />
+            <p className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
               The world&apos;s most trusted lost and found platform. Helping
               communities reunite with their lost belongings since 2020.
             </p>
@@ -112,7 +94,7 @@ export default function Footer() {
                   key={social.name}
                   href={social.href}
                   aria-label={social.name}
-                  className="w-9 h-9 bg-[rgb(var(--surface-2)/0.6)] hover:bg-[rgb(var(--accent)/0.12)] border border-app hover:border-accent rounded-lg flex items-center justify-center text-muted2 hover:text-accent transition-all duration-200"
+                  className="w-9 h-9 bg-gray-100 hover:bg-blue-50 border border-gray-200 hover:border-blue-200 rounded-lg flex items-center justify-center text-gray-500 hover:text-blue-600 transition-all duration-200"
                 >
                   {social.icon}
                 </a>
