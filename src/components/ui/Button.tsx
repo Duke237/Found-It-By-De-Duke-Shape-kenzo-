@@ -27,7 +27,7 @@ export default function Button({
 
   const variants = {
     primary:
-      "bg-[linear-gradient(90deg,rgb(var(--accent)),rgb(var(--accent-2)))] text-white hover:brightness-110 shadow-lg hover:shadow-black/10 hover:scale-105",
+      "bg-[rgb(var(--accent))] text-white hover:bg-[rgb(var(--accent-2))] shadow-lg hover:shadow-black/10 hover:scale-105",
     secondary:
       "bg-[rgb(var(--surface))] text-app hover:bg-[rgb(var(--surface-2))] shadow-lg hover:shadow-black/10 hover:scale-105 border border-app",
     outline:

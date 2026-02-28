@@ -216,7 +216,7 @@ export default function RecentItems() {
             >
               {/* Card Header */}
               <div
-                className="bg-[linear-gradient(135deg,rgb(var(--accent)/0.16),rgb(var(--accent-2)/0.03))] p-6 flex items-start justify-between"
+                className="bg-[rgb(var(--accent)/0.08)] p-6 flex items-start justify-between border-b border-app"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 bg-[rgb(var(--surface)/0.7)] rounded-2xl flex items-center justify-center text-3xl">

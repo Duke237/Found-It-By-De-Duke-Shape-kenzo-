@@ -6,27 +6,18 @@ export default function CTA() {
     <section className="py-20 lg:py-28 bg-app relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgb(var(--accent)/0.12),transparent,rgb(var(--accent-2)/0.06))]" />
+        <div className="absolute inset-0 bg-[rgb(var(--accent)/0.06)]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[rgb(var(--accent)/0.1)] rounded-full blur-3xl" />
-        {/* Grid */}
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(59,130,246,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.25) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Icon */}
-        <div className="w-20 h-20 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-black/10">
-          <svg
-            className="w-10 h-10 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Icon */}
+          <div className="w-20 h-20 bg-[rgb(var(--accent))] rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-black/10">
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
           >
             <path
               strokeLinecap="round"

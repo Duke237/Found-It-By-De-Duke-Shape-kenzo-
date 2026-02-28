@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
-import ThemeToggle from "@/components/theme/ThemeToggle";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -34,7 +33,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           {/* Logo */}
           <a href="#home" className="flex items-center gap-2 group">
-            <div className="w-9 h-9 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+            <div className="w-9 h-9 bg-[rgb(var(--accent))] rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
               <svg
                 className="w-5 h-5 text-white"
                 fill="none"
@@ -70,7 +69,6 @@ export default function Navbar() {
 
           {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
-            <ThemeToggle />
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -81,7 +79,6 @@ export default function Navbar() {
 
           {/* Mobile actions */}
           <div className="lg:hidden flex items-center gap-2">
-            <ThemeToggle className="w-10 h-10" />
             <button
               className="text-muted hover:text-app p-2"
               onClick={() => setMobileOpen(!mobileOpen)}

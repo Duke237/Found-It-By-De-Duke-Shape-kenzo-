@@ -77,8 +77,8 @@ const testimonials = [
 ];
 
 const avatarVariants: Record<string, string> = {
-  accent: "bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))]",
-  accent2: "bg-[linear-gradient(135deg,rgb(var(--accent-2)),rgb(var(--accent)))]",
+  accent: "bg-[rgb(var(--accent))]",
+  accent2: "bg-[rgb(var(--accent-2))]",
 };
 
 function StarRating({ rating }: { rating: number }) {
@@ -172,7 +172,7 @@ export default function Testimonials() {
               </div>
 
               {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(135deg,rgb(var(--accent)/0.05),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl bg-[rgb(var(--accent)/0.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             </div>
           ))}
         </div>

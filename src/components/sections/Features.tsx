@@ -160,7 +160,7 @@ export default function Features() {
               className="group relative bg-card rounded-2xl p-6 lg:p-8 border border-app hover:border-accent transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
               {/* Background glow on hover */}
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,rgb(var(--accent)/0.06),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute inset-0 bg-[rgb(var(--accent)/0.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               {/* Icon */}
               <div className="relative w-14 h-14 bg-[rgb(var(--accent)/0.12)] border border-[rgb(var(--accent)/0.25)] rounded-2xl flex items-center justify-center text-accent mb-5 group-hover:bg-[rgb(var(--accent)/0.18)] transition-colors duration-300">

@@ -40,20 +40,11 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center overflow-hidden bg-app"
     >
-      {/* Background gradient blobs */}
+      {/* Background blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-[rgb(var(--accent)/0.18)] rounded-full blur-3xl animate-pulse" />
         <div className="absolute top-1/2 -left-40 w-80 h-80 bg-[rgb(var(--accent-2)/0.12)] rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute bottom-0 right-1/3 w-72 h-72 bg-[rgb(var(--accent)/0.1)] rounded-full blur-3xl animate-pulse delay-2000" />
-        {/* Grid pattern */}
-        <div
-          className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 lg:pt-32 lg:pb-24">
@@ -185,7 +176,7 @@ export default function Hero() {
           {/* Right Content - Floating Cards */}
           <div className="relative hidden lg:block">
             {/* Main illustration card */}
-            <div className="relative bg-[linear-gradient(135deg,rgb(var(--surface)/0.9),rgb(var(--surface-2)/0.85))] rounded-3xl border border-app p-8 shadow-2xl">
+            <div className="relative bg-card-strong rounded-3xl border border-app p-8 shadow-2xl">
               {/* Map placeholder */}
               <div className="relative bg-[rgb(var(--surface-2)/0.7)] rounded-2xl overflow-hidden h-64 mb-6">
                 <div className="absolute inset-0 flex items-center justify-center">

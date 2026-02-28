@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Theme tokens (blue / white / black system)
+  Fixed (single) theme tokens: blue / white / black system
   Stored as space-separated RGB values so we can use alpha: rgb(var(--token) / 0.5)
 */
 
@@ -16,19 +16,6 @@
   --accent: 37 99 235; /* blue-600 */
   --accent-2: 29 78 216; /* blue-700 */
   --shadow: 2 6 23;
-}
-
-html[data-theme="dark"] {
-  --bg: 3 7 18; /* near-black with a blue tint */
-  --surface: 15 23 42;
-  --surface-2: 30 41 59;
-  --text: 248 250 252;
-  --muted: 148 163 184;
-  --muted-2: 100 116 139;
-  --border: 51 65 85;
-  --accent: 96 165 250; /* blue-400 */
-  --accent-2: 59 130 246; /* blue-500 */
-  --shadow: 0 0 0;
 }
 
 @layer base {
@@ -86,19 +73,8 @@ html[data-theme="dark"] {
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-2)));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: rgb(var(--accent));
   }
-}
-
-/* Smooth theme transitions (enabled briefly during toggle) */
-.theme-transition,
-.theme-transition * {
-  transition-property: background-color, color, border-color, fill, stroke, box-shadow;
-  transition-duration: 250ms;
-  transition-timing-function: ease;
 }
 
 /* Custom animations */

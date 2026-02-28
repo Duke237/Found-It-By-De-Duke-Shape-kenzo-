@@ -119,7 +119,7 @@ export default function Stats() {
                 {stat.description}
               </p>
               {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(135deg,rgb(var(--accent)/0.06),transparent)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 rounded-2xl bg-[rgb(var(--accent)/0.05)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
             </div>
           ))}
         </div>

@@ -81,7 +81,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2">
             <a href="#home" className="flex items-center gap-2 mb-4 group">
-              <div className="w-9 h-9 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-9 h-9 bg-[rgb(var(--accent))] rounded-xl flex items-center justify-center shadow-lg">
                 <svg
                   className="w-5 h-5 text-white"
                   fill="none"

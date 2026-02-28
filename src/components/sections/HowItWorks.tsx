@@ -125,7 +125,7 @@ export default function HowItWorks() {
         {/* Steps */}
         <div className="relative">
           {/* Connecting line (desktop) */}
-          <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-[linear-gradient(90deg,transparent,rgb(var(--accent)/0.35),transparent)]" />
+          <div className="hidden lg:block absolute top-16 left-0 right-0 h-0.5 bg-[rgb(var(--accent)/0.25)]" />
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
             {steps.map((step, i) => (
@@ -134,7 +134,7 @@ export default function HowItWorks() {
                 <div className="bg-card rounded-2xl p-6 border border-app hover:border-accent transition-all duration-300 hover:-translate-y-2 h-full">
                   {/* Number + Icon */}
                   <div className="flex items-start justify-between mb-5">
-                    <div className="w-14 h-14 bg-[linear-gradient(135deg,rgb(var(--accent)),rgb(var(--accent-2)))] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-black/10 group-hover:scale-110 transition-transform duration-300">
+                    <div className="w-14 h-14 bg-[rgb(var(--accent))] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-black/10 group-hover:scale-110 transition-transform duration-300">
                       {step.icon}
                     </div>
                     <span className="text-5xl font-black text-[rgb(var(--text)/0.06)] group-hover:text-[rgb(var(--accent)/0.12)] transition-colors duration-300">
