@@ -92,22 +92,62 @@ export async function POST(req: Request) {
   });
 }
 
-// GET route to fetch items (for browsing)
+// GET route to fetch items (for browsing or user's items)
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const type = searchParams.get("type") as "lost" | "found" | null;
   const category = searchParams.get("category");
-  const status = (searchParams.get("status") || "approved") as "pending" | "approved" | "rejected" | "resolved";
+  const status = searchParams.get("status") as "pending" | "approved" | "rejected" | "resolved" | null;
+  const mine = searchParams.get("mine") === "true";
+
+  // If "mine" is true, fetch only current user's items
+  if (mine) {
+    const sessionUser = await getSessionUser();
+    if (!sessionUser) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Get user from database
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, sessionUser.email));
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    let query = db.select().from(items).where(eq(items.userId, user.id));
+    
+    // Filter by type if specified
+    if (type) {
+      query = db.select().from(items).where(
+        type === "lost"
+          ? eq(items.type, "lost")
+          : eq(items.type, "found")
+      );
+      // Re-apply user filter
+      const allItemsOfType = await query;
+      const userItems = allItemsOfType.filter(item => item.userId === user.id);
+      return NextResponse.json({ items: userItems });
+    }
+
+    const userItems = await query;
+    return NextResponse.json({ items: userItems });
+  }
+
+  // Public browsing - filter by status (default to approved)
+  const defaultStatus = status || "approved";
 
   let query;
   if (type) {
     query = db.select().from(items).where(
-      type === "lost" 
+      type === "lost"
         ? eq(items.type, "lost")
         : eq(items.type, "found")
     );
   } else {
-    query = db.select().from(items).where(eq(items.status, status));
+    query = db.select().from(items).where(eq(items.status, defaultStatus));
   }
 
   const allItems = await query;
@@ -118,7 +158,7 @@ export async function GET(req: Request) {
     filteredItems = filteredItems.filter(item => item.category === category);
   }
   if (!type) {
-    filteredItems = filteredItems.filter(item => item.status === status);
+    filteredItems = filteredItems.filter(item => item.status === defaultStatus);
   }
 
   return NextResponse.json({ items: filteredItems });
