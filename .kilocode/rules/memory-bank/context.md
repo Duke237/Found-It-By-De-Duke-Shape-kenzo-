@@ -30,6 +30,8 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] Added AI Assistant chat page (only responds to lost/found related queries)
 - [x] Added Notifications page with system alerts (match found, submission status, updates)
 - [x] Added Settings page with profile picture upload, username, email, password change, language preference
+- [x] Fixed Vercel build error: Implemented lazy database initialization to prevent build-time DB connection errors
+- [x] Fixed Next.js prerender error: Added Suspense boundaries to login and signup pages for `useSearchParams()`
 
 ## Current Structure
 
@@ -136,4 +138,5 @@ export async function GET() {
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-28 | Added blue/white/black token color system (fixed single theme) |
+| 2026-03-01 | Fixed Vercel build: lazy DB initialization + Suspense boundaries for auth pages |
 | 2026-02-28 | Added auth (login/signup), demo cookie session API routes, and protected-route redirects for report/browse actions |
