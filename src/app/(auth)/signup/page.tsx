@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthCard from "@/components/auth/AuthCard";
 import AuthField from "@/components/auth/AuthField";
@@ -9,7 +9,32 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/components/auth/useAuth";
 import { validateSignup } from "@/lib/auth/validation";
 
-export default function SignupPage() {
+// Wrapper component to handle Suspense boundary for useSearchParams
+export default function SignupPageWrapper() {
+  return (
+    <Suspense fallback={
+      <AuthCard
+        eyebrow="Join FindIt"
+        title="Create your account"
+        subtitle="Report items, browse found listings, and reunite faster."
+        sideTitle="Safer access"
+        sideSubtitle="Create an account to unlock protected actions and manage your activity."
+      >
+        <div className="mt-8 space-y-5">
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-primary rounded animate-pulse" />
+        </div>
+      </AuthCard>
+    }>
+      <SignupPage />
+    </Suspense>
+  );
+}
+
+function SignupPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/dashboard";

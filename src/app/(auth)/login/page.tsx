@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import AuthCard from "@/components/auth/AuthCard";
 import AuthField from "@/components/auth/AuthField";
@@ -9,7 +9,30 @@ import Button from "@/components/ui/Button";
 import { useAuth } from "@/components/auth/useAuth";
 import { validateLogin } from "@/lib/auth/validation";
 
-export default function LoginPage() {
+// Wrapper component to handle Suspense boundary for useSearchParams
+export default function LoginPageWrapper() {
+  return (
+    <Suspense fallback={
+      <AuthCard
+        eyebrow="Welcome back"
+        title="Sign in"
+        subtitle="Access your saved reports and protected actions."
+        sideTitle="Find it faster"
+        sideSubtitle="Sign in to report items and browse found submissions securely."
+      >
+        <div className="mt-8 space-y-5">
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-gray-100 rounded animate-pulse" />
+          <div className="h-10 bg-primary rounded animate-pulse" />
+        </div>
+      </AuthCard>
+    }>
+      <LoginPage />
+    </Suspense>
+  );
+}
+
+function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/dashboard";
