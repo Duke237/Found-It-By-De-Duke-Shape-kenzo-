@@ -1,57 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import BottomNav from "@/components/dashboard/BottomNav";
 import { useAuth } from "@/components/auth/useAuth";
 
+type NotificationType = "broadcast" | "match_found" | "submission_status" | "system";
+
 type Notification = {
-  id: string;
-  type: "match" | "status" | "update" | "system";
+  id: number;
+  type: NotificationType;
   title: string;
   message: string;
-  timestamp: Date;
-  read: boolean;
+  itemId?: number;
+  isRead: boolean;
+  createdAt: string;
 };
 
-const mockNotifications: Notification[] = [
-  {
-    id: "1",
-    type: "match",
-    title: "Potential Match Found!",
-    message: "A black wallet similar to your lost item has been reported as found near Central Park.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-    read: false,
-  },
-  {
-    id: "2",
-    type: "status",
-    title: "Report Status Updated",
-    message: "Your lost item report for 'Silver Keys' has been reviewed and is now active.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-    read: false,
-  },
-  {
-    id: "3",
-    type: "update",
-    title: "New Item in Your Area",
-    message: "A new found item matching your search criteria has been added: Blue backpack.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-    read: true,
-  },
-  {
-    id: "4",
-    type: "system",
-    title: "Welcome to FindIt!",
-    message: "Thank you for joining FindIt. Start by reporting your lost items or browsing found items.",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48), // 2 days ago
-    read: true,
-  },
-];
-
-function getNotificationIcon(type: Notification["type"]) {
+function getNotificationIcon(type: NotificationType) {
   switch (type) {
-    case "match":
+    case "match_found":
       return (
         <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
           <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -59,7 +27,7 @@ function getNotificationIcon(type: Notification["type"]) {
           </svg>
         </div>
       );
-    case "status":
+    case "submission_status":
       return (
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
           <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +35,7 @@ function getNotificationIcon(type: Notification["type"]) {
           </svg>
         </div>
       );
-    case "update":
+    case "broadcast":
       return (
         <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
           <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +54,8 @@ function getNotificationIcon(type: Notification["type"]) {
   }
 }
 
-function formatTimeAgo(date: Date): string {
+function formatTimeAgo(dateStr: string): string {
+  const date = new Date(dateStr);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMins = Math.floor(diffMs / (1000 * 60));
@@ -105,11 +74,77 @@ function formatTimeAgo(date: Date): string {
 }
 
 export default function NotificationsPage() {
-  const { user, loading } = useAuth();
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const { user, loading: authLoading } = useAuth();
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [loading, setLoading] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  if (loading) {
+  // Fetch notifications
+  const fetchNotifications = useCallback(async () => {
+    try {
+      const res = await fetch("/api/notifications");
+      if (res.ok) {
+        const data = await res.json();
+        setNotifications(data.notifications || []);
+        setLastUpdate(new Date());
+      }
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial fetch
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+    }
+  }, [user, fetchNotifications]);
+
+  // Real-time polling every 10 seconds
+  useEffect(() => {
+    if (!user) return;
+
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [user, fetchNotifications]);
+
+  // Mark single notification as read
+  const markAsRead = async (id: number) => {
+    try {
+      await fetch("/api/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notificationId: id }),
+      });
+      setNotifications(prev =>
+        prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+      );
+    } catch (error) {
+      console.error("Failed to mark as read:", error);
+    }
+  };
+
+  // Mark all as read
+  const markAllAsRead = async () => {
+    try {
+      await fetch("/api/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ markAll: true }),
+      });
+      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    } catch (error) {
+      console.error("Failed to mark all as read:", error);
+    }
+  };
+
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -117,21 +152,11 @@ export default function NotificationsPage() {
     );
   }
 
-  const filteredNotifications = filter === "unread" 
-    ? notifications.filter(n => !n.read)
+  const filteredNotifications = filter === "unread"
+    ? notifications.filter(n => !n.isRead)
     : notifications;
 
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  function markAsRead(id: string) {
-    setNotifications(prev => 
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
-  }
-
-  function markAllAsRead() {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  }
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
     <div className="min-h-screen bg-white">
@@ -145,7 +170,12 @@ export default function NotificationsPage() {
 
         {/* Desktop header */}
         <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-gray-200 bg-white">
-          <h1 className="text-xl font-semibold text-gray-900">Notifications</h1>
+          <div>
+            <h1 className="text-xl font-semibold text-gray-900">Notifications</h1>
+            <p className="text-xs text-gray-500 mt-1">
+              Last updated: {lastUpdate.toLocaleTimeString()}
+            </p>
+          </div>
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
@@ -192,6 +222,9 @@ export default function NotificationsPage() {
                 </svg>
               </div>
               <p className="text-gray-500">No notifications</p>
+              <p className="text-sm text-gray-400 mt-1">
+                {filter === "unread" ? "All notifications have been read" : "No notifications yet"}
+              </p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -200,7 +233,7 @@ export default function NotificationsPage() {
                   key={notification.id}
                   onClick={() => markAsRead(notification.id)}
                   className={`p-4 rounded-2xl border transition-all cursor-pointer hover:shadow-md ${
-                    notification.read
+                    notification.isRead
                       ? "bg-white border-gray-200"
                       : "bg-blue-50 border-blue-200"
                   }`}
@@ -209,16 +242,16 @@ export default function NotificationsPage() {
                     {getNotificationIcon(notification.type)}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <h3 className={`font-semibold ${notification.read ? "text-gray-700" : "text-gray-900"}`}>
+                        <h3 className={`font-semibold ${notification.isRead ? "text-gray-700" : "text-gray-900"}`}>
                           {notification.title}
                         </h3>
-                        {!notification.read && (
+                        {!notification.isRead && (
                           <span className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 mt-2" />
                         )}
                       </div>
                       <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
                       <p className="text-xs text-gray-400 mt-2">
-                        {formatTimeAgo(notification.timestamp)}
+                        {formatTimeAgo(notification.createdAt)}
                       </p>
                     </div>
                   </div>

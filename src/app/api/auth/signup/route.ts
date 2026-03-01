@@ -1,6 +1,20 @@
 import { NextResponse } from "next/server";
 import { setSessionCookie } from "@/lib/auth/session";
 import { validateSignup } from "@/lib/auth/validation";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
+
+// Simple hash function for demo (in production, use bcrypt)
+function simpleHash(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash.toString(16);
+}
 
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as
@@ -25,9 +39,33 @@ export async function POST(req: Request) {
     );
   }
 
-  // Demo auth: no persistence; session cookie is enough for UI + routing.
-  const res = NextResponse.json({ user: { username, email, role: "user" } });
-  setSessionCookie(res, { username, email, role: "user" });
+  // Check if user already exists
+  const existingUser = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email));
+
+  if (existingUser.length > 0) {
+    return NextResponse.json(
+      { error: "User with this email already exists." },
+      { status: 400 }
+    );
+  }
+
+  // Create user in database
+  const passwordHash = simpleHash(password);
+  const [newUser] = await db
+    .insert(users)
+    .values({
+      username,
+      email,
+      passwordHash,
+      role: "user",
+    })
+    .returning();
+
+  const res = NextResponse.json({ user: { username: newUser.username, email: newUser.email, role: newUser.role } });
+  setSessionCookie(res, { username: newUser.username, email: newUser.email, role: newUser.role });
   return res;
 }
 
