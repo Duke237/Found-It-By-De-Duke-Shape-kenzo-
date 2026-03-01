@@ -65,12 +65,30 @@ const navItems = [
   },
 ];
 
+// Admin navigation item
+const adminNavItem = {
+  name: "Admin Dashboard",
+  href: "/admin",
+  icon: (
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+    </svg>
+  ),
+  isAdmin: true,
+};
+
 export default function Sidebar() {
   const pathname = usePathname();
   const { user } = useAuth();
   
   const displayName = user?.username || user?.email?.split("@")[0] || "User";
   const initials = (user?.username || user?.email || "U").slice(0, 2).toUpperCase();
+
+  // Build nav items - add admin link for admin users
+  const items = [...navItems];
+  if ((user as any)?.role === "admin") {
+    items.push(adminNavItem);
+  }
 
   return (
     <aside className="hidden md:flex flex-col fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 z-40">
@@ -81,7 +99,7 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-1">
-        {navItems.map((item) => {
+        {items.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
           return (
             <Link
