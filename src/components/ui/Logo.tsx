@@ -8,29 +8,26 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { icon: "w-7 h-7", text: "text-lg" },
-  md: { icon: "w-8 h-8", text: "text-xl" },
-  lg: { icon: "w-9 h-9", text: "text-2xl" },
+  sm: "h-8 w-auto",
+  md: "h-10 w-auto",
+  lg: "h-12 w-auto",
 };
 
 export default function Logo({ size = "md", href = "/", className = "" }: LogoProps) {
-  const sizeClasses = sizes[size];
   const content = (
-    <div className={`flex items-center gap-2 group ${className}`}>
-      <img
-        src="/found-it-logo.png"
-        alt="Found It Logo"
-        className={`${sizeClasses.icon} shadow-lg group-hover:scale-110 transition-transform duration-300`}
-        style={{ borderRadius: '12px' }}
-      />
-      <span className={`font-bold text-gray-900 ${sizeClasses.text} tracking-tight`}>
-        Found <span className="text-blue-600">It</span>
-      </span>
-    </div>
+    <img
+      src="/images/logo (2).png"
+      alt="Found It Logo"
+      className={`${sizes[size]} object-contain group-hover:scale-105 transition-transform duration-300 ${className}`}
+    />
   );
 
   if (href) {
-    return <Link href={href}>{content}</Link>;
+    return (
+      <Link href={href} className="inline-block group">
+        {content}
+      </Link>
+    );
   }
 
   return content;
