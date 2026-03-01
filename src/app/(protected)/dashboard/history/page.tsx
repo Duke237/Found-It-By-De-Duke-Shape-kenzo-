@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Sidebar from "@/components/dashboard/Sidebar";
+import BottomNav from "@/components/dashboard/BottomNav";
+import { useAuth } from "@/components/auth/useAuth";
 
 type ItemStatus = "pending" | "approved" | "rejected" | "resolved";
 
@@ -43,6 +46,7 @@ export default function HistoryPage() {
   const [items, setItems] = useState<HistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
     fetchUserItems();
@@ -81,8 +85,36 @@ export default function HistoryPage() {
     });
   };
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-white">
+      <Sidebar />
+
+      <div className="md:ml-64 pb-20 md:pb-0">
+        {/* Mobile header */}
+        <header className="md:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between">
+          <h1 className="text-lg font-semibold text-gray-900">My History</h1>
+        </header>
+
+        {/* Desktop header */}
+        <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-gray-200 bg-white">
+          <h1 className="text-xl font-semibold text-gray-900">My History</h1>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-gray-600">Welcome, {user?.username || "User"}</span>
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+              {(user?.username || "U").charAt(0).toUpperCase()}
+            </div>
+          </div>
+        </header>
+
+        <main className="p-6 md:p-8 animate-fade-in">
       {/* Header */}
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">My History</h1>
@@ -275,6 +307,10 @@ export default function HistoryPage() {
           </div>
         )}
       </div>
+    </main>
+      </div>
+
+      <BottomNav />
     </div>
   );
 }
