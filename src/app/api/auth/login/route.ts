@@ -56,8 +56,9 @@ export async function POST(req: Request) {
       });
     }
     
-    const res = NextResponse.json({ user: { email, role: "admin" } });
-    setSessionCookie(res, { email, role: "admin" });
+    const adminId = existingAdmin.length > 0 ? String(existingAdmin[0].id) : "admin";
+    const res = NextResponse.json({ user: { id: adminId, email, role: "admin" } });
+    setSessionCookie(res, { id: adminId, email, role: "admin" });
     return res;
   }
 
@@ -75,8 +76,8 @@ export async function POST(req: Request) {
     );
   }
 
-  const res = NextResponse.json({ user: { username: user.username, email: user.email, role: user.role } });
-  setSessionCookie(res, { username: user.username, email: user.email, role: user.role });
+  const res = NextResponse.json({ user: { id: String(user.id), username: user.username, email: user.email, role: user.role } });
+  setSessionCookie(res, { id: String(user.id), username: user.username, email: user.email, role: user.role });
   return res;
 }
 

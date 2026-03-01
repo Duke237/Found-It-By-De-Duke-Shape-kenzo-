@@ -64,8 +64,8 @@ export async function POST(req: Request) {
     })
     .returning();
 
-  const res = NextResponse.json({ user: { username: newUser.username, email: newUser.email, role: newUser.role } });
-  setSessionCookie(res, { username: newUser.username, email: newUser.email, role: newUser.role });
+  const res = NextResponse.json({ user: { id: String(newUser.id), username: newUser.username, email: newUser.email, role: newUser.role } });
+  setSessionCookie(res, { id: String(newUser.id), username: newUser.username, email: newUser.email, role: newUser.role });
   return res;
 }
 

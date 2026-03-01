@@ -4,8 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import BottomNav from "@/components/dashboard/BottomNav";
 import { useAuth } from "@/components/auth/useAuth";
+import { useSocket } from "@/lib/websocket/use-socket";
 
 type NotificationType = "broadcast" | "match_found" | "submission_status" | "system";
+type FilterType = "all" | "unread" | "broadcast" | "match" | "system";
 
 type Notification = {
   id: number;
@@ -15,6 +17,7 @@ type Notification = {
   itemId?: number;
   isRead: boolean;
   createdAt: string;
+  matchScore?: number;
 };
 
 function getNotificationIcon(type: NotificationType) {
@@ -62,6 +65,7 @@ function formatTimeAgo(dateStr: string): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
+  if (diffMins < 1) return "Just now";
   if (diffMins < 60) {
     return `${diffMins} min${diffMins !== 1 ? "s" : ""} ago`;
   } else if (diffHours < 24) {
@@ -76,11 +80,13 @@ function formatTimeAgo(dateStr: string): string {
 export default function NotificationsPage() {
   const { user, loading: authLoading } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [filter, setFilter] = useState<"all" | "unread">("all");
+  const [filter, setFilter] = useState<FilterType>("all");
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [newNotification, setNewNotification] = useState<Notification | null>(null);
+  const [socketConnected, setSocketConnected] = useState(false);
 
-  // Fetch notifications
+  // Fetch notifications from API
   const fetchNotifications = useCallback(async () => {
     try {
       const res = await fetch("/api/notifications");
@@ -103,16 +109,40 @@ export default function NotificationsPage() {
     }
   }, [user, fetchNotifications]);
 
-  // Real-time polling every 10 seconds
-  useEffect(() => {
-    if (!user) return;
+  // Real-time notification handler
+  const handleNotification = useCallback((data: Record<string, unknown>) => {
+    console.log("[Notifications] Received real-time notification:", data);
+    
+    const notificationData: Notification = {
+      id: data.id as number,
+      type: data.type as NotificationType,
+      title: data.title as string,
+      message: data.message as string,
+      itemId: data.itemId as number | undefined,
+      isRead: data.isRead as boolean,
+      createdAt: data.createdAt as string,
+      matchScore: data.matchScore as number | undefined,
+    };
+    
+    // Add new notification to the list
+    setNotifications((prev) => [notificationData, ...prev]);
+    setNewNotification(notificationData);
+    setLastUpdate(new Date());
 
-    const interval = setInterval(() => {
-      fetchNotifications();
-    }, 10000);
+    // Auto-dismiss the toast after 5 seconds
+    setTimeout(() => {
+      setNewNotification(null);
+    }, 5000);
+  }, []);
 
-    return () => clearInterval(interval);
-  }, [user, fetchNotifications]);
+  // Socket.io connection
+  const { isConnected } = useSocket({
+    userId: user?.id,
+    email: user?.email,
+    onConnect: () => setSocketConnected(true),
+    onDisconnect: () => setSocketConnected(false),
+    onNotification: handleNotification,
+  });
 
   // Mark single notification as read
   const markAsRead = async (id: number) => {
@@ -122,8 +152,8 @@ export default function NotificationsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ notificationId: id }),
       });
-      setNotifications(prev =>
-        prev.map(n => n.id === id ? { ...n, isRead: true } : n)
+      setNotifications((prev) =>
+        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
       );
     } catch (error) {
       console.error("Failed to mark as read:", error);
@@ -138,11 +168,45 @@ export default function NotificationsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ markAll: true }),
       });
-      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (error) {
       console.error("Failed to mark all as read:", error);
     }
   };
+
+  // Clear all notifications
+  const clearAll = async () => {
+    if (!confirm("Are you sure you want to clear all notifications?")) {
+      return;
+    }
+    
+    try {
+      await fetch("/api/notifications", {
+        method: "DELETE",
+      });
+      setNotifications([]);
+    } catch (error) {
+      console.error("Failed to clear notifications:", error);
+    }
+  };
+
+  // Filter notifications
+  const filteredNotifications = notifications.filter((n) => {
+    switch (filter) {
+      case "unread":
+        return !n.isRead;
+      case "broadcast":
+        return n.type === "broadcast";
+      case "match":
+        return n.type === "match_found";
+      case "system":
+        return n.type === "system" || n.type === "submission_status";
+      default:
+        return true;
+    }
+  });
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   if (authLoading || loading) {
     return (
@@ -152,63 +216,110 @@ export default function NotificationsPage() {
     );
   }
 
-  const filteredNotifications = filter === "unread"
-    ? notifications.filter(n => !n.isRead)
-    : notifications;
-
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-
   return (
     <div className="min-h-screen bg-white">
       <Sidebar />
 
       <div className="md:ml-64 pb-20 md:pb-0">
         {/* Mobile header */}
-        <header className="md:hidden bg-white border-b border-gray-200 px-4 py-4">
+        <header className="md:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between">
           <h1 className="text-lg font-semibold text-gray-900">Notifications</h1>
+          {socketConnected && (
+            <span className="flex items-center gap-1 text-xs text-green-600">
+              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              Live
+            </span>
+          )}
         </header>
 
         {/* Desktop header */}
         <header className="hidden md:flex items-center justify-between px-8 py-4 border-b border-gray-200 bg-white">
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900">Notifications</h1>
-            <p className="text-xs text-gray-500 mt-1">
-              Last updated: {lastUpdate.toLocaleTimeString()}
-            </p>
+          <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-xl font-semibold text-gray-900">Notifications</h1>
+              <p className="text-xs text-gray-500 mt-1">
+                Last updated: {lastUpdate.toLocaleTimeString()}
+                {socketConnected && (
+                  <span className="ml-2 text-green-600 flex items-center gap-1 inline-flex">
+                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                    Real-time
+                  </span>
+                )}
+              </p>
+            </div>
           </div>
-          {unreadCount > 0 && (
-            <button
-              onClick={markAllAsRead}
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-            >
-              Mark all as read
-            </button>
-          )}
+          <div className="flex items-center gap-4">
+            {unreadCount > 0 && (
+              <button
+                onClick={markAllAsRead}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Mark all as read
+              </button>
+            )}
+            {notifications.length > 0 && (
+              <button
+                onClick={clearAll}
+                className="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                Clear all
+              </button>
+            )}
+          </div>
         </header>
 
+        {/* Real-time notification toast */}
+        {newNotification && (
+          <div className="fixed top-4 right-4 z-50 animate-fade-in">
+            <div className="bg-white rounded-xl shadow-lg border border-blue-200 p-4 max-w-sm">
+              <div className="flex items-start gap-3">
+                {getNotificationIcon(newNotification.type)}
+                <div className="flex-1">
+                  <p className="font-medium text-gray-900 text-sm">{newNotification.title}</p>
+                  <p className="text-gray-600 text-xs mt-1">{newNotification.message}</p>
+                </div>
+                <button
+                  onClick={() => setNewNotification(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Filter tabs */}
-        <div className="border-b border-gray-200">
-          <div className="flex gap-4 px-4 md:px-8">
-            <button
-              onClick={() => setFilter("all")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
-                filter === "all"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilter("unread")}
-              className={`py-4 text-sm font-medium border-b-2 transition-colors ${
-                filter === "unread"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Unread {unreadCount > 0 && `(${unreadCount})`}
-            </button>
+        <div className="border-b border-gray-200 overflow-x-auto">
+          <div className="flex gap-2 px-4 md:px-8 min-w-max">
+            {[
+              { key: "all", label: "All", count: notifications.length },
+              { key: "unread", label: "Unread", count: unreadCount },
+              { key: "broadcast", label: "Broadcast", count: notifications.filter(n => n.type === "broadcast").length },
+              { key: "match", label: "Matches", count: notifications.filter(n => n.type === "match_found").length },
+              { key: "system", label: "System", count: notifications.filter(n => n.type === "system" || n.type === "submission_status").length },
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setFilter(tab.key as FilterType)}
+                className={`py-4 px-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  filter === tab.key
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                {tab.label}
+                {tab.count > 0 && (
+                  <span className={`ml-2 px-2 py-0.5 text-xs rounded-full ${
+                    filter === tab.key ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-600"
+                  }`}>
+                    {tab.count}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -223,7 +334,13 @@ export default function NotificationsPage() {
               </div>
               <p className="text-gray-500">No notifications</p>
               <p className="text-sm text-gray-400 mt-1">
-                {filter === "unread" ? "All notifications have been read" : "No notifications yet"}
+                {filter === "unread" 
+                  ? "All notifications have been read" 
+                  : filter === "match"
+                  ? "No match notifications yet"
+                  : filter === "broadcast"
+                  ? "No broadcast notifications yet"
+                  : "No notifications yet"}
               </p>
             </div>
           ) : (
@@ -250,6 +367,14 @@ export default function NotificationsPage() {
                         )}
                       </div>
                       <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
+                      {notification.matchScore && (
+                        <div className="mt-2 inline-flex items-center gap-1 px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                          </svg>
+                          {Math.round(notification.matchScore * 100)}% match
+                        </div>
+                      )}
                       <p className="text-xs text-gray-400 mt-2">
                         {formatTimeAgo(notification.createdAt)}
                       </p>

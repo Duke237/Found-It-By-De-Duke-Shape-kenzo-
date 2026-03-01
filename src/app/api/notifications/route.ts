@@ -6,7 +6,8 @@ import {
   getUserNotifications, 
   getUnreadCount, 
   markAsRead, 
-  markAllAsRead 
+  markAllAsRead,
+  clearAllNotifications
 } from "@/lib/notifications/notification-service";
 import { eq } from "drizzle-orm";
 
@@ -76,4 +77,25 @@ export async function PATCH(req: Request) {
   }
 
   return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+}
+
+// DELETE - Clear all notifications for current user
+export async function DELETE() {
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Get user from database
+  const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, sessionUser.email));
+
+  if (!user) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  await clearAllNotifications(user.id);
+  return NextResponse.json({ success: true, message: "All notifications cleared" });
 }

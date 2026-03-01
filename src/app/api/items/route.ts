@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { getSessionUser } from "@/lib/auth/session";
 import { db } from "@/db";
 import { items, users } from "@/db/schema";
-import { broadcastNotification } from "@/lib/notifications/notification-service";
-import { processNewItem } from "@/lib/matching/ai-matching-service";
+import {
+  queueItemMatching,
+  queueBroadcastNotification,
+} from "@/lib/jobs/job-queue";
 import { eq } from "drizzle-orm";
 
 export async function POST(req: Request) {
@@ -71,24 +73,44 @@ export async function POST(req: Request) {
     })
     .returning();
 
-  // Step 1: Broadcast notification to ALL users (except sender)
+  // Step 1: Queue broadcast notification to ALL users (except sender)
   const broadcastTitle = type === "lost" ? "📢 New Lost Item Reported" : "📢 New Found Item Reported";
   const broadcastMessage = `A new ${type} item has been reported: "${title}" in ${location}. Check if it's yours!`;
-  
-  // Fire and forget - don't await
-  broadcastNotification(user.id, broadcastTitle, broadcastMessage, newItem.id)
-    .then(() => console.log("Broadcast notification sent"))
-    .catch(err => console.error("Failed to send broadcast:", err));
 
-  // Step 2: Trigger AI matching service (fire and forget)
-  processNewItem(newItem.id, type)
-    .then(matches => console.log(`AI matching complete. Found ${matches.length} matches`))
-    .catch(err => console.error("AI matching failed:", err));
+  // Queue background jobs for real-time processing
+  try {
+    // Initialize workers if not already done
+    const { initializeWorkers } = await import("@/lib/jobs/job-queue");
+    initializeWorkers();
+
+    // Queue broadcast notification
+    await queueBroadcastNotification({
+      excludeUserId: user.id,
+      title: broadcastTitle,
+      message: broadcastMessage,
+      itemId: newItem.id,
+      itemType: type,
+    });
+
+    // Queue AI matching job
+    await queueItemMatching({
+      itemId: newItem.id,
+      itemType: type,
+      userId: user.id,
+      title,
+      location,
+    });
+
+    console.log("[Items API] Background jobs queued successfully");
+  } catch (error) {
+    console.error("[Items API] Failed to queue background jobs:", error);
+    // Don't fail the request - item is already saved
+  }
 
   return NextResponse.json({
     success: true,
     item: newItem,
-    message: "Item submitted successfully. Notifications are being sent.",
+    message: "Item submitted successfully. Notifications and AI matching are processing in the background.",
   });
 }
 

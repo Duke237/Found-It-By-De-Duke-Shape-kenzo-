@@ -145,3 +145,72 @@ export async function markAllAsRead(userId: number) {
     .set({ isRead: true })
     .where(and(eq(notifications.userId, userId), eq(notifications.isRead, false)));
 }
+
+/**
+ * Delete all notifications for a user
+ */
+export async function clearAllNotifications(userId: number) {
+  await db
+    .delete(notifications)
+    .where(eq(notifications.userId, userId));
+}
+
+/**
+ * Send notification when match status is updated by admin
+ */
+export async function sendMatchStatusNotification(
+  match: { lostItemId: number; foundItemId: number; similarityScore: number },
+  status: "confirmed" | "rejected"
+) {
+  // Get both items and their owners
+  const [lostItem] = await db
+    .select({
+      id: items.id,
+      title: items.title,
+      userId: items.userId,
+    })
+    .from(items)
+    .where(eq(items.id, match.lostItemId));
+
+  const [foundItem] = await db
+    .select({
+      id: items.id,
+      title: items.title,
+      userId: items.userId,
+    })
+    .from(items)
+    .where(eq(items.id, match.foundItemId));
+
+  if (!lostItem || !foundItem) return;
+
+  const title = status === "confirmed" 
+    ? "✅ Match Confirmed by Admin" 
+    : "❌ Match Rejected by Admin";
+  
+  const message = status === "confirmed"
+    ? `Great news! The admin has confirmed a match between your lost item "${lostItem.title}" and a found item "${foundItem.title}". You can now contact each other!`
+    : `The admin has reviewed and rejected the potential match between "${lostItem.title}" and "${foundItem.title}". We'll continue searching for better matches.`;
+
+  // Notify both users
+  const { emitToUser } = await import("@/app/api/socketio/route");
+
+  // Notify lost item owner
+  const lostNotification = await createNotification({
+    userId: lostItem.userId,
+    type: "match_found",
+    title,
+    message,
+    itemId: lostItem.id,
+  });
+  emitToUser(lostItem.userId, "notification", lostNotification);
+
+  // Notify found item owner
+  const foundNotification = await createNotification({
+    userId: foundItem.userId,
+    type: "match_found",
+    title,
+    message,
+    itemId: foundItem.id,
+  });
+  emitToUser(foundItem.userId, "notification", foundNotification);
+}

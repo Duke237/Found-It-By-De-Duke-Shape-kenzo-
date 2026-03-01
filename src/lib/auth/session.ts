@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import type { NextResponse } from "next/server";
 
 export type SessionUser = {
+  id: string;
   username?: string;
   email: string;
   role: "user" | "admin";
@@ -17,8 +18,9 @@ function decodeSession(value: string): SessionUser | null {
   try {
     const json = Buffer.from(value, "base64url").toString("utf8");
     const parsed = JSON.parse(json) as Partial<SessionUser>;
-    if (!parsed.email || typeof parsed.email !== "string") return null;
+    if (!parsed.email || typeof parsed.email !== "string" || !parsed.id) return null;
     return {
+      id: parsed.id,
       email: parsed.email,
       username: typeof parsed.username === "string" ? parsed.username : undefined,
       role: parsed.role === "admin" ? "admin" : "user",
