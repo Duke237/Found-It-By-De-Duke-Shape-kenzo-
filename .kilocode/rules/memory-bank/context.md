@@ -148,3 +148,4 @@ export async function GET() {
 | 2026-02-28 | Added blue/white/black token color system (fixed single theme) |
 | 2026-03-01 | Fixed Vercel build: lazy DB initialization + Suspense boundaries for auth pages |
 | 2026-02-28 | Added auth (login/signup), demo cookie session API routes, and protected-route redirects for report/browse actions |
+| 2026-03-02 | Updated logo to image-only, moved to public folder, adjusted sizes (sm:40px, md:48px, lg:56px) |

@@ -8,9 +8,9 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: "h-8 w-auto",
-  md: "h-10 w-auto",
-  lg: "h-12 w-auto",
+  sm: "h-10 w-auto",
+  md: "h-12 w-auto",
+  lg: "h-14 w-auto",
 };
 
 export default function Logo({ size = "md", href = "/", className = "" }: LogoProps) {
