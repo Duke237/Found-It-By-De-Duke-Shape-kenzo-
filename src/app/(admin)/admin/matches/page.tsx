@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminBottomNav from "@/components/admin/AdminBottomNav";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 type MatchStatus = "pending" | "confirmed" | "rejected";
 type FilterStatus = "all" | MatchStatus;
 
@@ -426,9 +430,9 @@ export default function AdminMatchesPage() {
                   <h4 className="font-semibold text-gray-900">{selectedMatch.lostItem.title}</h4>
                   <p className="text-sm text-gray-600 mt-2">{selectedMatch.lostItem.description}</p>
                   <div className="mt-3 space-y-1 text-sm text-gray-500">
-                    <p>📍 {selectedMatch.lostItem.location}</p>
-                    <p>🏷️ {selectedMatch.lostItem.category}</p>
-                    <p>👤 {selectedMatch.lostUser.username} ({selectedMatch.lostUser.email})</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="geo-alt" /> {selectedMatch.lostItem.location}</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="tag" /> {selectedMatch.lostItem.category}</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="person" /> {selectedMatch.lostUser.username} ({selectedMatch.lostUser.email})</p>
                   </div>
                 </div>
 
@@ -446,9 +450,9 @@ export default function AdminMatchesPage() {
                   <h4 className="font-semibold text-gray-900">{selectedMatch.foundItem.title}</h4>
                   <p className="text-sm text-gray-600 mt-2">{selectedMatch.foundItem.description}</p>
                   <div className="mt-3 space-y-1 text-sm text-gray-500">
-                    <p>📍 {selectedMatch.foundItem.location}</p>
-                    <p>🏷️ {selectedMatch.foundItem.category}</p>
-                    <p>👤 {selectedMatch.foundUser.username} ({selectedMatch.foundUser.email})</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="geo-alt" /> {selectedMatch.foundItem.location}</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="tag" /> {selectedMatch.foundItem.category}</p>
+                    <p className="flex items-center gap-1"><BootstrapIcon name="person" /> {selectedMatch.foundUser.username} ({selectedMatch.foundUser.email})</p>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,10 @@
 import React from "react";
 import Badge from "@/components/ui/Badge";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 const features = [
   {
     icon: (
@@ -137,7 +141,7 @@ export default function Features() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="accent" className="mb-4">
-            ✨ &nbsp; Platform Features
+            <BootstrapIcon name="stars" className="mr-1" /> Platform Features
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-6 leading-tight">
             Everything You Need to{" "}

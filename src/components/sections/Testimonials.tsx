@@ -1,6 +1,10 @@
 import React from "react";
 import Badge from "@/components/ui/Badge";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 const testimonials = [
   {
     name: "Sarah Mitchell",
@@ -114,7 +118,7 @@ export default function Testimonials() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <Badge variant="accent" className="mb-4">
-            💬 &nbsp; Success Stories
+            <BootstrapIcon name="chat-dots" className="mr-1" /> Success Stories
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-6 leading-tight">
             Real People,{" "}
@@ -150,8 +154,8 @@ export default function Testimonials() {
 
               {/* Recovery badge */}
               <div className="flex items-center gap-2 mb-5">
-                <span className="text-xs bg-[rgb(var(--accent)/0.12)] text-accent border border-[rgb(var(--accent)/0.25)] px-2.5 py-1 rounded-full font-semibold">
-                  ✓ Recovered: {t.item}
+                <span className="text-xs bg-[rgb(var(--accent)/0.12)] text-accent border border-[rgb(var(--accent)/0.25)] px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                  <BootstrapIcon name="check" /> Recovered: {t.item}
                 </span>
                 <span className="text-xs text-muted2">in {t.timeToRecover}</span>
               </div>
@@ -180,16 +184,16 @@ export default function Testimonials() {
         {/* Trust indicators */}
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: "⭐", value: "4.9/5", label: "Average Rating" },
-            { icon: "👥", value: "25,000+", label: "Active Users" },
-            { icon: "🔒", value: "100%", label: "Secure Platform" },
-            { icon: "🏆", value: "#1", label: "Lost & Found App" },
+            { icon: "star-fill", value: "4.9/5", label: "Average Rating" },
+            { icon: "people", value: "25,000+", label: "Active Users" },
+            { icon: "lock", value: "100%", label: "Secure Platform" },
+            { icon: "trophy", value: "#1", label: "Lost & Found App" },
           ].map((item, i) => (
             <div
               key={i}
               className="bg-card rounded-xl p-4 border border-app text-center"
             >
-              <div className="text-2xl mb-1">{item.icon}</div>
+              <div className="text-2xl mb-1 text-accent"><BootstrapIcon name={item.icon} /></div>
               <div className="text-app font-bold text-xl">{item.value}</div>
               <div className="text-muted2 text-xs">{item.label}</div>
             </div>

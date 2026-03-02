@@ -4,9 +4,13 @@ import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 const floatingCards = [
   {
-    icon: "🎒",
+    icon: "bag",
     title: "Backpack Found",
     location: "Central Park, NY",
     time: "2 min ago",
@@ -14,7 +18,7 @@ const floatingCards = [
     color: "green",
   },
   {
-    icon: "📱",
+    icon: "phone",
     title: "iPhone 15 Lost",
     location: "Times Square, NY",
     time: "15 min ago",
@@ -22,7 +26,7 @@ const floatingCards = [
     color: "red",
   },
   {
-    icon: "🔑",
+    icon: "key",
     title: "Keys Recovered",
     location: "Grand Central, NY",
     time: "1 hr ago",
@@ -53,7 +57,7 @@ export default function Hero() {
           <div className="space-y-8">
             <div className="space-y-4">
               <Badge variant="accent" className="animate-fade-in">
-                🔍 &nbsp; #1 Lost & Found Platform
+                <BootstrapIcon name="search" className="mr-1" /> #1 Lost & Found Platform
               </Badge>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-app leading-tight tracking-tight">
@@ -237,14 +241,14 @@ export default function Hero() {
                     className="flex items-center gap-3 bg-[rgb(var(--surface-2)/0.55)] rounded-xl p-3 border border-app hover:border-accent transition-all duration-300 group"
                   >
                     <div className="w-10 h-10 bg-[rgb(var(--surface-2)/0.75)] rounded-xl flex items-center justify-center text-xl flex-shrink-0">
-                      {card.icon}
+                      <BootstrapIcon name={card.icon} className="text-accent" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-app text-sm font-semibold truncate">
                         {card.title}
                       </p>
-                      <p className="text-muted2 text-xs truncate">
-                        📍 {card.location}
+                      <p className="text-muted2 text-xs truncate flex items-center gap-1">
+                        <BootstrapIcon name="geo-alt" className="text-xs" /> {card.location}
                       </p>
                     </div>
                     <div className="text-right flex-shrink-0">
@@ -288,7 +292,7 @@ export default function Hero() {
                   <p className="text-app text-xs font-semibold">
                     Item Matched!
                   </p>
-                  <p className="text-muted2 text-xs">Wallet returned ✓</p>
+                  <p className="text-muted2 text-xs flex items-center gap-1">Wallet returned <BootstrapIcon name="check" className="text-green-600" /></p>
                 </div>
               </div>
             </div>
@@ -296,7 +300,7 @@ export default function Hero() {
             {/* Floating badge */}
             <div className="absolute -bottom-4 -left-4 bg-card-strong border border-app rounded-2xl p-3 shadow-xl animate-float-delayed">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">🏆</span>
+                <BootstrapIcon name="trophy" className="text-2xl text-accent" />
                 <div>
                   <p className="text-app text-xs font-semibold">
                     Top Community

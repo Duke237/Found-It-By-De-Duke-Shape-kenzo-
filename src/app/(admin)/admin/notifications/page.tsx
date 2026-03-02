@@ -2,6 +2,10 @@
 
 import React, { useState } from "react";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 const demoNotifications = [
   { id: 1, type: "system", title: "New User Registration", message: "A new user has registered on the platform", date: "2026-02-28 10:30", read: false },
   { id: 2, type: "alert", title: "Pending Reports", message: "15 reports are awaiting review", date: "2026-02-28 09:15", read: false },
@@ -70,9 +74,9 @@ export default function AdminNotificationsPage() {
                     notification.type === "system" ? "bg-gray-100" :
                     notification.type === "alert" ? "bg-orange-100" : "bg-green-100"
                   }`}>
-                    {notification.type === "system" && <span className="text-gray-600">ℹ️</span>}
-                    {notification.type === "alert" && <span className="text-orange-600">⚠️</span>}
-                    {notification.type === "success" && <span className="text-green-600">✓</span>}
+                    {notification.type === "system" && <span className="text-gray-600"><BootstrapIcon name="info-circle" /></span>}
+                    {notification.type === "alert" && <span className="text-orange-600"><BootstrapIcon name="exclamation-triangle" /></span>}
+                    {notification.type === "success" && <span className="text-green-600"><BootstrapIcon name="check-circle" /></span>}
                   </div>
                   <div className="flex-1">
                     <p className="font-medium text-gray-900">{notification.title}</p>
@@ -94,15 +98,15 @@ export default function AdminNotificationsPage() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
             <div className="space-y-3">
               <button className="w-full p-4 bg-blue-50 hover:bg-blue-100 rounded-xl flex items-center gap-3 transition-colors">
-                <span className="text-blue-600">📧</span>
+                <span className="text-blue-600"><BootstrapIcon name="envelope" /></span>
                 <span className="font-medium text-gray-900">Send Individual Notification</span>
               </button>
               <button className="w-full p-4 bg-green-50 hover:bg-green-100 rounded-xl flex items-center gap-3 transition-colors">
-                <span className="text-green-600">📢</span>
+                <span className="text-green-600"><BootstrapIcon name="megaphone" /></span>
                 <span className="font-medium text-gray-900">Create Announcement</span>
               </button>
               <button className="w-full p-4 bg-purple-50 hover:bg-purple-100 rounded-xl flex items-center gap-3 transition-colors">
-                <span className="text-purple-600">🔔</span>
+                <span className="text-purple-600"><BootstrapIcon name="bell" /></span>
                 <span className="font-medium text-gray-900">Notification Settings</span>
               </button>
             </div>

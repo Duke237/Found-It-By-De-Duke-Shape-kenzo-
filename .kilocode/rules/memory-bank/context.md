@@ -32,6 +32,13 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] Added Settings page with profile picture upload, username, email, password change, language preference
 - [x] Fixed Vercel build error: Implemented lazy database initialization to prevent build-time DB connection errors
 - [x] Fixed Next.js prerender error: Added Suspense boundaries to login and signup pages for `useSearchParams()`
+- [x] Updated Logo component to display only image (`images/logo (2).png`) without "Foundit" text
+- [x] Replaced ALL emojis with Bootstrap Icons across the entire application
+  - Installed `bootstrap-icons` package
+  - Created reusable BootstrapIcon component
+  - Updated CTA, Hero, Features, HowItWorks, RecentItems, Testimonials sections
+  - Updated Footer, Admin pages (dashboard, matches, notifications)
+  - All emojis replaced: 🔍📋🔒⚡🆓🌍🎒📱🔑📍✓🏆💬⭐👥✨🔄→❤️📧📢🔔ℹ️⚠️👤🔗🏷️
 
 ## Current Structure
 

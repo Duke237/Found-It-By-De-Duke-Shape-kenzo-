@@ -1,6 +1,10 @@
 import React from "react";
 import Logo from "@/components/ui/Logo";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 const footerLinks = {
   Platform: [
     { label: "Report Lost Item", href: "#" },
@@ -150,9 +154,8 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 pt-6 border-t border-app">
-          <p className="text-muted2 text-sm">
-            © 2026 FindIt. All rights reserved. Made with ❤️ for honest
-            communities.
+          <p className="text-muted2 text-sm flex items-center gap-1">
+            © 2026 FindIt. All rights reserved. Made with <BootstrapIcon name="heart-fill" className="text-red-500" /> for honest communities.
           </p>
           <div className="flex items-center gap-4 text-xs text-muted2">
             <span className="flex items-center gap-1.5">

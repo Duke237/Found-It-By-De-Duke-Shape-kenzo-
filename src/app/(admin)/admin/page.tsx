@@ -1,5 +1,9 @@
 import React from "react";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 export default function AdminDashboard() {
   // Demo data - in a real app this would come from the database
   const stats = [
@@ -105,10 +109,10 @@ export default function AdminDashboard() {
                   activity.type === "found" ? "bg-green-100" :
                   activity.type === "match" ? "bg-purple-100" : "bg-blue-100"
                 }`}>
-                  {activity.type === "lost" && <span className="text-red-600">⚠️</span>}
-                  {activity.type === "found" && <span className="text-green-600">✓</span>}
-                  {activity.type === "match" && <span className="text-purple-600">🔗</span>}
-                  {activity.type === "user" && <span className="text-blue-600">👤</span>}
+                  {activity.type === "lost" && <span className="text-red-600"><BootstrapIcon name="exclamation-triangle" /></span>}
+                  {activity.type === "found" && <span className="text-green-600"><BootstrapIcon name="check-circle" /></span>}
+                  {activity.type === "match" && <span className="text-purple-600"><BootstrapIcon name="link" /></span>}
+                  {activity.type === "user" && <span className="text-blue-600"><BootstrapIcon name="person" /></span>}
                 </div>
                 <div>
                   <p className="font-medium text-gray-900">{activity.item}</p>

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@kilocode/app-builder-db": "github:Kilo-Org/app-builder-db#main",
+    "bootstrap-icons": "^1.13.1",
     "bullmq": "^5.70.1",
     "drizzle-orm": "^0.45.1",
     "ioredis": "^5.10.0",

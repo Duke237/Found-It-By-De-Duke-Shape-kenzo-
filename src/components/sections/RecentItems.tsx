@@ -4,6 +4,10 @@ import React, { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/Button";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 type ItemStatus = "Lost" | "Found" | "Returned";
 type ItemCategory =
   | "Electronics"
@@ -17,7 +21,7 @@ type ItemCategory =
 
 interface Item {
   id: number;
-  emoji: string;
+  icon: string;
   title: string;
   category: ItemCategory;
   status: ItemStatus;
@@ -31,7 +35,7 @@ interface Item {
 const items: Item[] = [
   {
     id: 1,
-    emoji: "📱",
+    icon: "phone",
     title: "iPhone 15 Pro Max",
     category: "Electronics",
     status: "Lost",
@@ -44,7 +48,7 @@ const items: Item[] = [
   },
   {
     id: 2,
-    emoji: "👜",
+    icon: "bag",
     title: "Brown Leather Handbag",
     category: "Bags",
     status: "Found",
@@ -56,7 +60,7 @@ const items: Item[] = [
   },
   {
     id: 3,
-    emoji: "🔑",
+    icon: "key",
     title: "Car Keys + Keychain",
     category: "Keys",
     status: "Found",
@@ -68,7 +72,7 @@ const items: Item[] = [
   },
   {
     id: 4,
-    emoji: "💻",
+    icon: "laptop",
     title: "MacBook Pro 14-inch",
     category: "Electronics",
     status: "Lost",
@@ -81,7 +85,7 @@ const items: Item[] = [
   },
   {
     id: 5,
-    emoji: "🎒",
+    icon: "backpack",
     title: "North Face Backpack",
     category: "Bags",
     status: "Returned",
@@ -93,7 +97,7 @@ const items: Item[] = [
   },
   {
     id: 6,
-    emoji: "💍",
+    icon: "gem",
     title: "Gold Wedding Ring",
     category: "Jewelry",
     status: "Lost",
@@ -151,7 +155,7 @@ export default function RecentItems() {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
           <div>
             <Badge variant="accent" className="mb-4">
-              📋 &nbsp; Live Reports
+              <BootstrapIcon name="clipboard" className="mr-1" /> Live Reports
             </Badge>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-app mb-4 leading-tight">
               Recent{" "}
@@ -166,7 +170,7 @@ export default function RecentItems() {
             </p>
           </div>
           <Button variant="outline" size="md">
-            View All Reports →
+            View All Reports <BootstrapIcon name="arrow-right" className="ml-1" />
           </Button>
         </div>
 
@@ -220,7 +224,7 @@ export default function RecentItems() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 bg-[rgb(var(--surface)/0.7)] rounded-2xl flex items-center justify-center text-3xl">
-                    {item.emoji}
+                    <BootstrapIcon name={item.icon} className="text-accent text-2xl" />
                   </div>
                   <div>
                     <h3 className="text-app font-bold text-base leading-tight">
@@ -279,12 +283,12 @@ export default function RecentItems() {
                   </div>
                   <div className="flex items-center gap-2">
                     {item.reward && (
-                      <span className="text-xs font-bold text-accent bg-[rgb(var(--accent)/0.12)] px-2 py-0.5 rounded-full">
-                        🏆 {item.reward}
+                      <span className="text-xs font-bold text-accent bg-[rgb(var(--accent)/0.12)] px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <BootstrapIcon name="trophy" /> {item.reward}
                       </span>
                     )}
-                    <button className="text-xs text-accent hover:opacity-90 font-semibold transition-colors">
-                      View →
+                    <button className="text-xs text-accent hover:opacity-90 font-semibold transition-colors flex items-center gap-1">
+                      View <BootstrapIcon name="arrow-right" />
                     </button>
                   </div>
                 </div>

@@ -1,6 +1,10 @@
 import React from "react";
 import Button from "@/components/ui/Button";
 
+const BootstrapIcon = ({ name, className = "" }: { name: string; className?: string }) => (
+  <i className={`bi bi-${name} ${className}`}></i>
+);
+
 export default function CTA() {
   return (
     <section className="py-20 lg:py-28 bg-app relative overflow-hidden">
@@ -45,23 +49,23 @@ export default function CTA() {
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
           <Button variant="primary" size="lg">
-            🔍 &nbsp; Report Lost Item
+            <BootstrapIcon name="search" className="mr-2" /> Report Lost Item
           </Button>
           <Button variant="secondary" size="lg">
-            📋 &nbsp; Browse Found Items
+            <BootstrapIcon name="clipboard" className="mr-2" /> Browse Found Items
           </Button>
         </div>
 
         {/* Trust badges */}
         <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted2">
           {[
-            { icon: "🔒", text: "Secure & Private" },
-            { icon: "⚡", text: "Instant Notifications" },
-            { icon: "🆓", text: "Free to Use" },
-            { icon: "🌍", text: "120+ Cities" },
+            { icon: "lock", text: "Secure & Private" },
+            { icon: "lightning-charge", text: "Instant Notifications" },
+            { icon: "gift", text: "Free to Use" },
+            { icon: "globe", text: "120+ Cities" },
           ].map((badge, i) => (
             <div key={i} className="flex items-center gap-2">
-              <span>{badge.icon}</span>
+              <BootstrapIcon name={badge.icon} />
               <span>{badge.text}</span>
             </div>
           ))}
