@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
   },
   // Disable React strict mode in dev for faster reloads
   reactStrictMode: false,
-  // Faster dev builds by reducing file watching
+  // Use webpack for custom configuration
+  turbopack: {},
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {
