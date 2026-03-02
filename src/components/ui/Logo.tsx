@@ -16,7 +16,7 @@ const sizes = {
 export default function Logo({ size = "md", href = "/", className = "" }: LogoProps) {
   const content = (
     <img
-      src="https://i.pinimg.com/1200x/bf/84/f6/bf84f6ed0544b1ccc6a26a9246706bf8.jpg"
+      src="/images/logo (2).png"
       alt="Found It Logo"
       className={`${sizes[size]} object-contain group-hover:scale-105 transition-transform duration-300 ${className}`}
     />

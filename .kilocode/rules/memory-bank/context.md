@@ -35,10 +35,11 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] Updated Logo component to display only image (`images/logo (2).png`) without "Foundit" text
 - [x] Replaced ALL emojis with Bootstrap Icons across the entire application
   - Installed `bootstrap-icons` package
-  - Created reusable BootstrapIcon component
+  - Created reusable BootstrapIcon component with inline SVGs for performance
   - Updated CTA, Hero, Features, HowItWorks, RecentItems, Testimonials sections
   - Updated Footer, Admin pages (dashboard, matches, notifications)
-  - All emojis replaced: 🔍📋🔒⚡🆓🌍🎒📱🔑📍✓🏆💬⭐👥✨🔄→❤️📧📢🔔ℹ️⚠️👤🔗🏷️
+  - Optimized Next.js config for faster builds and reloads
+  - Fixed database lazy initialization for Vercel builds
 
 ## Current Structure
 
